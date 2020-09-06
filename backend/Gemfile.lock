@@ -79,6 +79,10 @@ GEM
     fuzzy_match (2.1.0)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
+    graphiql-rails (1.7.0)
+      railties
+      sprockets-rails
+    graphql (1.11.4)
     http (4.4.1)
       addressable (~> 2.3)
       http-cookie (~> 1.0)
@@ -195,6 +199,8 @@ DEPENDENCIES
   byebug
   dotenv-rails
   fuzzy_match
+  graphiql-rails
+  graphql
   http
   listen (~> 3.2)
   nokogiri
