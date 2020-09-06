@@ -1,3 +1,5 @@
+import "./app.sass"
+
 import React from "react"
 import { useQuery, gql } from "@apollo/client"
 
@@ -30,6 +32,7 @@ const App = () => {
   return (
     <React.Fragment>
       <p>Here I am!</p>
+      <button className="button is-primary">Primary button</button>
       <ul>
         {data.playlists.map((playlist, idx) => {
           return <li key={idx}>{playlist.name}</li>
