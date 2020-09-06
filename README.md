@@ -16,3 +16,7 @@ It consistes of 2 things - frontend and backend.
 For this project, I really want to learn [GraphQL](https://graphql.org/) and [Apollo](https://www.apollographql.com/), which I haven't really dug into yet.
 
 I also want to try using a [minimal CSS framework](https://yon.fun/top-10-css-frameworks/). For [12inch.reviews](https://12inch.reviews), I used Tailwind, which was great, but for this project I want to stay as lean as possible.
+
+### Helpful learnings along the way
+
+* [Good tutorial](https://mattboldt.com/2019/06/23/rails-graphql-react-apollo-part-two/) to get up and running quickly
