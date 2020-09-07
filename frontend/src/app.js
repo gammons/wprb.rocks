@@ -1,4 +1,6 @@
 import "./app.sass"
+import SpotifyLoginButton from "./components/login/spotifyLoginButton"
+import Player from "./components/player"
 
 import React from "react"
 import { useQuery, gql } from "@apollo/client"
@@ -31,6 +33,7 @@ const App = () => {
 
   return (
     <React.Fragment>
+      <SpotifyLoginButton />
       <p>Here I am!</p>
       <button className="button is-primary">Primary button</button>
       <ul>
@@ -38,6 +41,7 @@ const App = () => {
           return <li key={idx}>{playlist.name}</li>
         })}
       </ul>
+      <Player />
     </React.Fragment>
   )
 }
