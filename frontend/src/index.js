@@ -1,6 +1,6 @@
 import React from "react"
 import ReactDOM from "react-dom"
-import App from "./app"
+import Router from "./services/router"
 import * as serviceWorker from "./serviceWorker"
 
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client"
@@ -13,7 +13,7 @@ const client = new ApolloClient({
 ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <App />
+      <Router />
     </ApolloProvider>
   </React.StrictMode>,
   document.getElementById("root")

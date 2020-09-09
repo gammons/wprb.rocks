@@ -11,5 +11,6 @@ module Types
     field :timeslot, String, null: true
     field :songs, [Types::SongType], null: true
     field :dj, Types::DjType, null: true
+    field :slug, String, null: false
   end
 end
