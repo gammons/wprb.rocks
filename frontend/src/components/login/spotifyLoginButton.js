@@ -4,7 +4,7 @@ import React from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faSpotify } from "@fortawesome/free-brands-svg-icons"
 
-const SpotifyLoginButton = props => {
+const SpotifyLoginButton = (props) => {
   return (
     <a
       className="cursor-pointer"
@@ -25,7 +25,7 @@ const SpotifyLoginButton = props => {
         borderTopLeftRadius: "500px",
         borderTopRightRadius: "500px",
         borderBottomLeftRadius: "500px",
-        borderBottomRightRadius: "500px"
+        borderBottomRightRadius: "500px",
       }}
       onClick={props.onClick}
     >

@@ -5,4 +5,8 @@ class Playlist < ApplicationRecord
   def slug
     name.parameterize
   end
+
+  def date
+    created_at.strftime("%Y-%m-%d")
+  end
 end

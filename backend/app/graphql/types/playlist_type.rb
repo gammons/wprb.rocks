@@ -12,5 +12,6 @@ module Types
     field :songs, [Types::SongType], null: true
     field :dj, Types::DjType, null: true
     field :slug, String, null: false
+    field :date, String, null: true
   end
 end

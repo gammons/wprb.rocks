@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_05_093033) do
+ActiveRecord::Schema.define(version: 2020_09_09_103954) do
 
   create_table "djs", force: :cascade do |t|
     t.string "name"
@@ -25,7 +25,9 @@ ActiveRecord::Schema.define(version: 2020_09_05_093033) do
     t.string "timeslot"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "slug"
     t.index ["dj_id"], name: "index_playlists_on_dj_id"
+    t.index ["slug", "created_at"], name: "index_playlists_on_slug_and_created_at"
     t.index ["spinitron_id"], name: "index_playlists_on_spinitron_id"
   end
 
