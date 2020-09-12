@@ -11,7 +11,8 @@ import ArtistAndTrack from "./player/artistAndTrack"
 import VolumeSlider from "./player/volumeSlider"
 
 type Props = {
-  uri: string | null
+  uri: string | null,
+  accessTokenFn: () => void,
 }
 
 const Player = (props: Props) => {
@@ -35,13 +36,14 @@ const Player = (props: Props) => {
   const volumeRef = useRef(null)
 
   let uri = null
-  if (props.uri !== null) uri = `spotify:album:${props.uri}`
+  if (props.uri) uri = `spotify:album:${props.uri}`
+  console.log("uri = ", uri)
 
   const setupPlayer = () => {
     const aPlayer = new window.Spotify.Player({
-      name: "12inch.reviews Player",
+      name: "WPRB.rocks Player",
       volume,
-      getOauthToken: props.accessTokenFn
+      getOauthToken: props.accessTokenFn,
     })
 
     aPlayer.addListener("initialization_error", console.error)
@@ -49,7 +51,7 @@ const Player = (props: Props) => {
     aPlayer.addListener("account_error", console.error)
     aPlayer.addListener("playback_error", console.error)
 
-    aPlayer.addListener("player_state_changed", state => {
+    aPlayer.addListener("player_state_changed", (state) => {
       setArtist(state.track_window.current_track.artists[0].name)
       setAlbum(state.track_window.current_track.album.name)
       setTrackTitle(state.track_window.current_track.name)
@@ -69,10 +71,10 @@ const Player = (props: Props) => {
       }
     })
 
-    aPlayer.addListener("ready", ret => {
+    aPlayer.addListener("ready", (ret) => {
       const player = new SpotifyPlayer(ret.device_id, props.accessTokenFn)
       setSpotifyPlayer(player)
-      volumeRef.current = debounce(val => {
+      volumeRef.current = debounce((val) => {
         aPlayer.setVolume(val)
       }, 500)
     })
@@ -149,7 +151,7 @@ const Player = (props: Props) => {
     setTrackNum(trackToPlay)
   }
 
-  const onSetVolume = ev => {
+  const onSetVolume = (ev) => {
     volumeRef.current(ev.target.value)
     setVolume(ev.target.value)
   }
@@ -159,7 +161,7 @@ const Player = (props: Props) => {
     timer.current = setTimeout(progressTick, 1000)
   }
 
-  const progressClick = percentage => {
+  const progressClick = (percentage) => {
     const newPosition = trackDuration * percentage
     setPosition(newPosition)
     if (isPlaying) {
@@ -168,14 +170,11 @@ const Player = (props: Props) => {
   }
 
   return (
-    <div className="w-full bg-gray-200 border-t-1 border-gray-400 shadow flex flex-row pt-2 px-8 h-32">
-      <div
-        className="my-2 absolute h-24 w-24 bg-cover rounded overflow-hidden bg-gray-500"
-        style={{ backgroundImage: `url(${albumImageURL})` }}
-      />
+    <div className="box">
+      <div style={{ backgroundImage: `url(${albumImageURL})` }} />
 
-      <div className="md:flex flex-row flex-wrap w-full">
-        <div className="pl-32 relative md:absolute">
+      <div>
+        <div>
           <ArtistAndTrack
             artist={artist}
             trackTitle={trackTitle}
@@ -183,10 +182,10 @@ const Player = (props: Props) => {
           />
         </div>
 
-        <div className="w-full flex flex-wrap justify-around items-center pl-32 md:pl-0">
+        <div>
           <div></div>
-          <div className="w-full md:w-1/3">
-            <div className="w-full flex flex-row justify-around items-center mb-4">
+          <div>
+            <div>
               <PrevTrackButton
                 disabled={uri === null}
                 onClick={onRequestPrevTrack}
@@ -206,7 +205,7 @@ const Player = (props: Props) => {
               onClick={progressClick}
             />
           </div>
-          <div className="w-full md:w-0 my-4 flex justify-center md:justify-start">
+          <div>
             <VolumeSlider onSetVolume={onSetVolume} volume={volume} />
           </div>
         </div>

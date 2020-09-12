@@ -29,11 +29,28 @@ const App = (props: Props) => {
       </section>
 
       <section className="section">
-        <div className="container is-fluid">{props.children}</div>
+        <div className="container">{props.children}</div>
       </section>
 
-      <footer className="footer">
+      <section className="section">
         <Player />
+      </section>
+
+      <footer className="footer has-text-centered">
+        <span>
+          A simple,{" "}
+          <a
+            rel="noreferrer"
+            target="_blank"
+            href="https://github.com/gammons/wprb.rocks"
+          >
+            open-source
+          </a>{" "}
+          side project by{" "}
+          <a target="_blank" rel="noreferrer" href="https://grant.dev">
+            Grant Ammons
+          </a>
+        </span>
       </footer>
     </React.Fragment>
   )
