@@ -6,6 +6,7 @@ import { faSpotify } from "@fortawesome/free-brands-svg-icons"
 
 type Props = {
   onClick: () => void,
+  isLoggedIn: boolean,
 }
 
 const SpotifyLoginButton = (props: Props) => {
@@ -14,7 +15,7 @@ const SpotifyLoginButton = (props: Props) => {
       <span className="icon">
         <FontAwesomeIcon icon={faSpotify} />
       </span>
-      <span>Login with Spotify</span>
+      <span>{props.isLoggedIn ? "Logout" : "Login with Spotify"}</span>
     </button>
   )
 }

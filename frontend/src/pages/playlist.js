@@ -1,15 +1,18 @@
 // @flow
 
 import React from "react"
+import { useQuery, gql } from "@apollo/client"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faPlay } from "@fortawesome/free-solid-svg-icons"
 
-import { useQuery, gql } from "@apollo/client"
+import PlaylistContext from "../components/playlistContext"
 
 import "./css/playlist.css"
 
 const Playlist = (props: any) => {
+  const { setPlaylist } = React.useContext(PlaylistContext)
+
   const slug = props.match.params.slug
   const date = props.match.params.date
 
@@ -51,6 +54,10 @@ const Playlist = (props: any) => {
     day: "numeric",
   })
 
+  const onLoadPlaylist = () => {
+    setPlaylist(data.playlist.songs.map((s) => s.spotifySongId))
+  }
+
   return (
     <React.Fragment>
       <h1 className="title">
@@ -59,7 +66,7 @@ const Playlist = (props: any) => {
       <h2 className="subtitle">{prettyAirDate}</h2>
 
       <div className="container has-text-centered">
-        <button className="button is-primary">
+        <button onClick={onLoadPlaylist} className="button is-primary">
           <span className="icon">
             <FontAwesomeIcon icon={faPlay} />
           </span>

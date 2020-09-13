@@ -10,12 +10,15 @@ import PrevTrackButton from "./player/prevTrackButton"
 import ArtistAndTrack from "./player/artistAndTrack"
 import VolumeSlider from "./player/volumeSlider"
 
+import PlaylistContext from "./playlistContext"
+
 type Props = {
-  uri: string | null,
   accessTokenFn: () => void,
 }
 
 const Player = (props: Props) => {
+  const { playlist } = React.useContext(PlaylistContext)
+
   const [isReady, setIsReady] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
   const [spotifyPlayer, setSpotifyPlayer] = useState(null)
@@ -34,10 +37,6 @@ const Player = (props: Props) => {
   const [albumImageURL, setAlbumImageURL] = useState("")
   const [volume, setVolume] = useState(0.7)
   const volumeRef = useRef(null)
-
-  let uri = null
-  if (props.uri) uri = `spotify:album:${props.uri}`
-  console.log("uri = ", uri)
 
   const setupPlayer = () => {
     const aPlayer = new window.Spotify.Player({
@@ -102,14 +101,14 @@ const Player = (props: Props) => {
   }, [timer.current])
 
   React.useEffect(() => {
-    if (uri && isReady) {
+    if (playlist.length > 0 && isReady) {
       onStartPlay()
     }
-  }, [uri])
+  }, [playlist.length])
 
   const onStartPlay = () => {
     clearTimeout(timer.current)
-    spotifyPlayer.play(uri, 0, 0).then(() => {
+    spotifyPlayer.play(playlist, 0, 0).then(() => {
       progressTick()
       setIsPlaying(true)
       setTrackNum(0)
@@ -119,7 +118,7 @@ const Player = (props: Props) => {
 
   const onTogglePlay = () => {
     if (!isPlaying) {
-      spotifyPlayer.play(uri, trackNum, position).then(() => {
+      spotifyPlayer.play(playlist, trackNum, position).then(() => {
         setIsPlaying(!isPlaying)
         progressTick()
       })
@@ -135,7 +134,7 @@ const Player = (props: Props) => {
   const onRequestNextTrack = () => {
     if (!hasNextTrack) return
     if (isPlaying) {
-      spotifyPlayer.play(uri, trackNum + 1, 0)
+      spotifyPlayer.play(playlist, trackNum + 1, 0)
     }
     setPosition(0)
     setTrackNum(trackNum + 1)
@@ -145,7 +144,7 @@ const Player = (props: Props) => {
     const trackToPlay = trackNum === 0 ? 0 : trackNum - 1
 
     if (isPlaying) {
-      spotifyPlayer.play(uri, trackToPlay, 0)
+      spotifyPlayer.play(playlist, trackToPlay, 0)
     }
     setPosition(0)
     setTrackNum(trackToPlay)
@@ -165,7 +164,7 @@ const Player = (props: Props) => {
     const newPosition = trackDuration * percentage
     setPosition(newPosition)
     if (isPlaying) {
-      spotifyPlayer.play(uri, trackNum, newPosition)
+      spotifyPlayer.play(playlist, trackNum, newPosition)
     }
   }
 
@@ -187,16 +186,16 @@ const Player = (props: Props) => {
           <div>
             <div>
               <PrevTrackButton
-                disabled={uri === null}
+                disabled={playlist.length === 0}
                 onClick={onRequestPrevTrack}
               />
               <PlayButton
-                disabled={uri === null}
+                disabled={playlist.length === 0}
                 isPlaying={isPlaying}
                 onClick={onTogglePlay}
               />
               <NextTrackButton
-                disabled={uri === null || !hasNextTrack}
+                disabled={playlist.length === 0 || !hasNextTrack}
                 onClick={onRequestNextTrack}
               />
             </div>

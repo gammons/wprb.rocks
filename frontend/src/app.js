@@ -5,6 +5,10 @@ import { Link } from "react-router-dom"
 
 import SpotifyLoginButton from "./components/login/spotifyLoginButton"
 import Player from "./components/player"
+import getUrlParam from "./services/getUrlParam"
+import TokenManager from "./services/tokenManager"
+
+import PlaylistContext from "./components/playlistContext"
 
 import "./app.sass"
 
@@ -32,8 +36,25 @@ const onSpotifyLoginClick = () => {
 }
 
 const App = (props: Props) => {
+  const [isLoggedIn, setIsLoggedIn] = React.useState(
+    TokenManager.hasAccessToken()
+  )
+  const [playlist, setPlaylist] = React.useState([])
+
+  React.useEffect(() => {
+    const _accessToken = getUrlParam("access_token")
+    const _refreshToken = getUrlParam("refresh_token")
+
+    if (!_accessToken) return
+
+    TokenManager.setAccessToken(_accessToken)
+    TokenManager.setRefreshToken(_refreshToken)
+
+    setIsLoggedIn(true)
+  }, [])
+
   return (
-    <React.Fragment>
+    <PlaylistContext.Provider value={{ playlist, setPlaylist }}>
       <section className="section">
         <div className="level">
           <div className="level-left">
@@ -42,7 +63,10 @@ const App = (props: Props) => {
             </h1>
           </div>
           <div className="level-right">
-            <SpotifyLoginButton onClick={onSpotifyLoginClick} />
+            <SpotifyLoginButton
+              onClick={onSpotifyLoginClick}
+              isLoggedIn={isLoggedIn}
+            />
           </div>
         </div>
       </section>
@@ -52,7 +76,7 @@ const App = (props: Props) => {
       </section>
 
       <section className="section">
-        <Player />
+        <Player accessTokenFn={TokenManager.accessTokenFn} />
       </section>
 
       <footer className="footer has-text-centered">
@@ -71,7 +95,7 @@ const App = (props: Props) => {
           </a>
         </span>
       </footer>
-    </React.Fragment>
+    </PlaylistContext.Provider>
   )
 }
 
