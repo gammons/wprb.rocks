@@ -7,7 +7,6 @@ import { useQuery, gql } from "@apollo/client"
 
 const Shows = (props: any) => {
   const slug = props.match.params.slug
-  console.log("slug = ", slug)
 
   const q = gql`
     {
