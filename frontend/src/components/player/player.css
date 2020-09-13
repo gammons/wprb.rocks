@@ -1,0 +1,100 @@
+.player-outer {
+  border-top: 1px solid #ccc;
+  position: fixed;
+  width: 100%;
+  top: calc(100vh - 143px);
+  left: 0;
+  background-color: white;
+}
+
+.player {
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.player {
+  display: flex;
+  flex-direction: row;
+}
+
+.trackInfo {
+  display: flex;
+  flex-direction: row;
+}
+
+.player-inner {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.artist-track-name {
+  max-width: 20vw;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 20px;
+  padding-left: 20px;
+}
+
+.albumCover {
+  width: 70px;
+  height: 70px;
+  background-size: cover;
+  border-radius: 10px;
+}
+
+.controls {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.control-buttons {
+  min-width: 200px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.progressBarHolder {
+  min-width: 200px;
+  min-height: 10px;
+  border: 1px solid #ccc;
+  border-radius: 1px;
+  cursor: pointer;
+}
+
+.progressBar {
+  height: 10px;
+  cursor: pointer;
+  background-color: #333;
+}
+
+.playerButton {
+  font-size: 26px;
+}
+
+.disabled {
+  color: #ccc;
+}
+
+.bottom-footer {
+  border-top: 1px solid #eee;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.track-name {
+  font-weight: bold;
+}
+
+.artist-name {
+  font-size: 14px;
+}

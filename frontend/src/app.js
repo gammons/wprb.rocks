@@ -10,6 +10,7 @@ import TokenManager from "./services/tokenManager"
 
 import PlaylistContext from "./components/playlistContext"
 
+import "./app.css"
 import "./app.sass"
 
 type Props = {
@@ -58,8 +59,13 @@ const App = (props: Props) => {
       <section className="section">
         <div className="level">
           <div className="level-left">
+            <Link to="/">
+              <img className="header-img" src="/wprb.png" />
+            </Link>
             <h1 className="title is-1">
-              <Link to="/">Wprb.rocks!</Link>
+              <Link to="/" className="header-link">
+                Rocks!
+              </Link>
             </h1>
           </div>
           <div className="level-right">
@@ -78,23 +84,6 @@ const App = (props: Props) => {
       <section className="section">
         <Player accessTokenFn={TokenManager.accessTokenFn} />
       </section>
-
-      <footer className="footer has-text-centered">
-        <span>
-          A simple,{" "}
-          <a
-            rel="noreferrer"
-            target="_blank"
-            href="https://github.com/gammons/wprb.rocks"
-          >
-            open-source
-          </a>{" "}
-          side project by{" "}
-          <a target="_blank" rel="noreferrer" href="https://grant.dev">
-            Grant Ammons
-          </a>
-        </span>
-      </footer>
     </PlaylistContext.Provider>
   )
 }

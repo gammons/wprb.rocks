@@ -12,6 +12,10 @@ import VolumeSlider from "./player/volumeSlider"
 
 import PlaylistContext from "./playlistContext"
 
+import Footer from "./footer"
+
+import "./player/player.css"
+
 type Props = {
   accessTokenFn: () => void,
 }
@@ -169,22 +173,25 @@ const Player = (props: Props) => {
   }
 
   return (
-    <div className="box">
-      <div style={{ backgroundImage: `url(${albumImageURL})` }} />
-
+    <div className="player-outer">
       <div>
-        <div>
-          <ArtistAndTrack
-            artist={artist}
-            trackTitle={trackTitle}
-            album={album}
-          />
-        </div>
+        <div className="player">
+          {/* track cover and artist name, on left */}
+          <div className="trackInfo">
+            <div
+              className="albumCover"
+              style={{ backgroundImage: `url(${albumImageURL})` }}
+            />
+            <ArtistAndTrack
+              artist={artist}
+              trackTitle={trackTitle}
+              album={album}
+            />
+          </div>
 
-        <div>
-          <div></div>
-          <div>
-            <div>
+          {/* controls in middle */}
+          <div className="controls">
+            <div className="control-buttons">
               <PrevTrackButton
                 disabled={playlist.length === 0}
                 onClick={onRequestPrevTrack}
@@ -204,10 +211,13 @@ const Player = (props: Props) => {
               onClick={progressClick}
             />
           </div>
+
+          {/* volume slider, always at end*/}
           <div>
             <VolumeSlider onSetVolume={onSetVolume} volume={volume} />
           </div>
         </div>
+        <Footer />
       </div>
     </div>
   )

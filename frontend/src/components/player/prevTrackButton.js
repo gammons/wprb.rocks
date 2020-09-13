@@ -7,9 +7,7 @@ import { faStepBackward } from "@fortawesome/free-solid-svg-icons"
 const PrevTrackButton = (props) => {
   return (
     <a
-      className={`text-2xl ${
-        props.disabled ? "text-gray-500" : "cursor-pointer"
-      }`}
+      className={`playerButton ${props.disabled ? "disabled" : "enabled"}`}
       onClick={props.onClick}
     >
       <FontAwesomeIcon icon={faStepBackward} />

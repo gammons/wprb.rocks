@@ -11,18 +11,14 @@ const PlayButton = (props) => {
 
   return props.isPlaying ? (
     <a
-      className={`text-2xl ${
-        props.disabled ? "text-gray-500" : "cursor-pointer"
-      }`}
+      className={`playerButton ${props.disabled ? "disabled" : "enabled"}`}
       onClick={onClick}
     >
       <FontAwesomeIcon icon={faPause} />
     </a>
   ) : (
     <a
-      className={`text-2xl ${
-        props.disabled ? "text-gray-500" : "cursor-pointer"
-      }`}
+      className={`playerButton ${props.disabled ? "disabled" : "enabled"}`}
       onClick={onClick}
     >
       <FontAwesomeIcon icon={faPlay} />

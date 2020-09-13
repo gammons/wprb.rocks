@@ -11,13 +11,9 @@ const ProgressBar = (props) => {
   }
 
   return (
-    <div
-      className="border border-gray-400 shadow w-full rounded-sm cursor-pointer"
-      onClick={onClick}
-      ref={(r) => (bar = r)}
-    >
+    <div className="progressBarHolder" onClick={onClick} ref={(r) => (bar = r)}>
       <div
-        className="bg-gray-800 text-xs leading-none py-1 text-center text-white"
+        className="progressBar"
         style={{
           width: `${(props.percentage || 0) * 100}%`,
           transition: "all 0.5s linear",

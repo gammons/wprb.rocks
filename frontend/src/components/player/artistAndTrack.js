@@ -4,17 +4,17 @@ import React from "react"
 type Props = {
   artist: string,
   album: string,
-  trackTitle: string
+  trackTitle: string,
 }
 
 const ArtistAndTrack = (props: Props) => {
   if (!props.artist && !props.trackTitle) return null
 
   return (
-    <div className="text-sm md:text-lg">
-      <span className="font-bold">{props.trackTitle}</span>
+    <div className="artist-track-name">
+      <span className="track-name">{props.trackTitle}</span>
       <br />
-      <span>{props.artist}</span>
+      <span className="artist-name">{props.artist}</span>
     </div>
   )
 }
