@@ -6,8 +6,6 @@ import { Link } from "react-router-dom"
 import { useQuery, gql } from "@apollo/client"
 
 const Shows = (props: any) => {
-  const slug = props.match.params.slug
-
   const q = gql`
     {
       playlists {
