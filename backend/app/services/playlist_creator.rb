@@ -16,7 +16,11 @@ class PlaylistCreator
     retrieve.each do |pl|
       next if Playlist.exists?(spinitron_id: pl["id"])
 
+      puts "Processing #{pl['title']}"
+
       dj = Dj.find_or_create_by(name: pl["text"])
+
+      next if dj.should_ignore?
 
       playlist = Playlist.create(
         name: pl["title"],

@@ -10,12 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_09_103954) do
+ActiveRecord::Schema.define(version: 2020_09_14_095658) do
 
   create_table "djs", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "should_ignore", default: false
   end
 
   create_table "playlists", force: :cascade do |t|

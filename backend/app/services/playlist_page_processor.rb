@@ -16,7 +16,11 @@ class PlaylistPageProcessor
     doc = Nokogiri::HTML(html)
     doc.search("tr.spin-item").each do |play|
       artist = play.css("span.artist")[0].text
-      album = play.css("span.release")[0].text
+      album = begin
+                play.css("span.release")[0].text
+              rescue StandardError
+                nil
+              end
       song = play.css("span.song")[0].text
 
       ret << { artist: artist, album: album, song: song }
