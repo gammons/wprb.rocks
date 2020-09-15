@@ -14,7 +14,7 @@ import PlaylistContext from "./playlistContext"
 
 import Footer from "./footer"
 
-import "./player/player.css"
+import "./player/css/player.css"
 
 type Props = {
   accessTokenFn: () => void,

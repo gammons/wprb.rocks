@@ -1,10 +1,10 @@
 .player-outer {
-  border-top: 1px solid #ccc;
+  border-top: 1px solid #666;
   position: fixed;
   width: 100%;
   top: calc(100vh - 143px);
   left: 0;
-  background-color: white;
+  background-color: #333;
 }
 
 .player {
@@ -84,7 +84,9 @@
 }
 
 .bottom-footer {
-  border-top: 1px solid #eee;
+  color: #ccc;
+  background-color: #555;
+  border-top: 1px solid #666;
   padding-top: 5px;
   padding-bottom: 5px;
   text-align: center;

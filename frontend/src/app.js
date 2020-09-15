@@ -10,8 +10,7 @@ import TokenManager from "./services/tokenManager"
 
 import PlaylistContext from "./components/playlistContext"
 
-import "./app.css"
-import "./app.sass"
+import "./app.scss"
 
 type Props = {
   children?: React.Node,
@@ -56,34 +55,38 @@ const App = (props: Props) => {
 
   return (
     <PlaylistContext.Provider value={{ playlist, setPlaylist }}>
-      <section className="section">
-        <div className="level">
-          <div className="level-left">
-            <Link to="/">
-              <img className="header-img" src="/wprb.png" />
-            </Link>
-            <h1 className="title is-1">
-              <Link to="/" className="header-link">
-                Rocks!
+      <div className="app">
+        <section className="section header">
+          <div className="level">
+            <div className="level-left">
+              <Link to="/">
+                <img className="header-img" src="/wprb.png" />
               </Link>
-            </h1>
+              <h1 className="title is-1">
+                <Link to="/" className="header-link">
+                  Rocks!
+                </Link>
+              </h1>
+            </div>
+            <div className="level-right">
+              <SpotifyLoginButton
+                onClick={onSpotifyLoginClick}
+                isLoggedIn={isLoggedIn}
+              />
+            </div>
           </div>
-          <div className="level-right">
-            <SpotifyLoginButton
-              onClick={onSpotifyLoginClick}
-              isLoggedIn={isLoggedIn}
-            />
+        </section>
+
+        <section className="section main">
+          <div className="container">
+            <div className="box">{props.children}</div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="section">
-        <div className="container">{props.children}</div>
-      </section>
-
-      <section className="section">
-        <Player accessTokenFn={TokenManager.accessTokenFn} />
-      </section>
+        <section className="section player">
+          <Player accessTokenFn={TokenManager.accessTokenFn} />
+        </section>
+      </div>
     </PlaylistContext.Provider>
   )
 }

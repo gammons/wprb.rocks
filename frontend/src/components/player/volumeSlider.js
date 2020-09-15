@@ -1,7 +1,7 @@
 // @flow
 import React from "react"
 
-import "./range.css"
+import "./css/range.css"
 
 type Props = {
   volume: number,

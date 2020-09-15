@@ -12,8 +12,18 @@ module Types
       argument :date, String, required: true
     end
 
+    field :playlists_by_date, [Types::PlaylistType], null: false do
+      description "Find playlists by date"
+      argument :date, String, required: true
+    end
+
     def djs
       Dj.all
+    end
+
+    def playlists_by_date(date: nil)
+      d = Date.parse(date)
+      Playlist.where(created_at: d.beginning_of_day..d.end_of_day)
     end
 
     def playlists(slug: nil)

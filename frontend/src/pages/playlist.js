@@ -2,6 +2,7 @@
 
 import React from "react"
 import { useQuery, gql } from "@apollo/client"
+import { Link } from "react-router-dom"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faPlay } from "@fortawesome/free-solid-svg-icons"
@@ -36,6 +37,7 @@ const Playlist = (props: any) => {
         id
         name
         date
+        slug
       }
     }
   `
@@ -63,7 +65,10 @@ const Playlist = (props: any) => {
       <h1 className="title">
         {showName} with {djName}
       </h1>
-      <h2 className="subtitle">{prettyAirDate}</h2>
+      <h2 className="subtitle">
+        {prettyAirDate}{" "}
+        <Link to={`/show/${data.playlist.slug}`}>See other airdates</Link>
+      </h2>
 
       <div className="container has-text-centered">
         <button onClick={onLoadPlaylist} className="button is-primary">
