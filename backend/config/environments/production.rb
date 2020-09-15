@@ -105,7 +105,7 @@ Rails.application.configure do
   config.hosts = "api.wprb.rocks"
   config.middleware.insert_before 0, Rack::Cors do
     allow do
-      origins "wprb.rocks"
+      origins "https://wprb.rocks"
       resource "api.wprb.rocks", headers: :any, methods: %i[get post options]
     end
   end
