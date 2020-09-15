@@ -9,6 +9,8 @@ import { faPlay } from "@fortawesome/free-solid-svg-icons"
 
 import PlaylistContext from "../components/playlistContext"
 
+import TokenManager from "../services/tokenManager"
+
 import "./css/playlist.css"
 
 const Playlist = (props: any) => {
@@ -57,7 +59,11 @@ const Playlist = (props: any) => {
   })
 
   const onLoadPlaylist = () => {
-    setPlaylist(data.playlist.songs.map((s) => s.spotifySongId))
+    if (TokenManager.hasAccessToken()) {
+      setPlaylist(data.playlist.songs.map((s) => s.spotifySongId))
+    } else {
+      alert("Please login with Spotify before loading playlists!")
+    }
   }
 
   return (
