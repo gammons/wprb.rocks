@@ -5,8 +5,13 @@ import * as serviceWorker from "./serviceWorker"
 
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client"
 
+const uri =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:3000/graphql"
+    : "https://api.wprb.rocks/graphql"
+
 const client = new ApolloClient({
-  uri: "http://localhost:3000/graphql",
+  uri: uri,
   cache: new InMemoryCache(),
 })
 
