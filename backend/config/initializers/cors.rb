@@ -7,7 +7,7 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins "wprb.rocks"
+    origins "wprb.rocks", "api.wprb.rocks"
 
     resource "*",
              headers: :any,
