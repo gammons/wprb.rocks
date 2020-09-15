@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dbbackup
+  namespace: ultralist
+spec:
+spec:
+  restartPolicy: Never
+  containers:
+  - name: ultralist-prod-db-backup
+    image: gammons1/db_backup:latest
+    env:
+      - name: MYSQL_USER
+        value: root
+      - name: MYSQL_HOST
+        value: mysql
+      - name: MYSQL_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: mysql
+            key: mysql-root-password
+      - name: AWS_ACCESS_KEY_ID
+        valueFrom:
+          secretKeyRef:
+            name: aws-s3-backup-creds
+            key: aws-access-key-id
+      - name: AWS_SECRET_ACCESS_KEY
+        valueFrom:
+          secretKeyRef:
+            name: aws-s3-backup-creds
+            key: aws-secret-access-key
+    command: ['sh','-c','sleep 3600']

@@ -1,0 +1,114 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wprb-rocks-deploy
+  namespace: wprb-rocks
+  labels:
+    app: wprb-rocks-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: wprb-rocks-backend
+  template:
+    metadata:
+      labels:
+        app: wprb-rocks-backend
+    spec:
+      containers:
+      - name: wprb-rocks-backend
+        image: gammons1/wprb-rocks-backend:v1
+        readinessProbe:
+          httpGet:
+            path: "/hb"
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: "/hb"
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        ports:
+        - containerPort: 3000
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: database-url
+              key: database-url
+        - name: SPOTIFY_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: spotify-oauth
+              key: spotify-app-id
+        - name: SPOTIFY_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: spotify-oauth
+              key: spotify-app-secret
+        - name: RAILS_ENV
+          value: "production"
+        - name: RAILS_LOG_TO_STDOUT
+          value: "true"
+        command:
+          - "/bin/bash"
+          - "-c"
+          - "rm -f tmp/pids/server.pid && bin/rails s -p 3000 -b '0.0.0.0'"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wprb-rocks-backend-service
+  namespace: wprb-rocks
+spec:
+  selector:
+    app: wprb-rocks-backend
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: show-getter
+  namespace: wprb-rocks
+spec:
+  schedule: "0 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+          - name: wprb-rocks-show-getter
+            image: gammons1/wprb-rocks-backend:v1
+            ports:
+            - containerPort: 3000
+            env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: database-url
+                  key: database-url
+            - name: SPOTIFY_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: spotify-oauth
+                  key: spotify-app-id
+            - name: SPOTIFY_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: spotify-oauth
+                  key: spotify-app-secret
+            - name: RAILS_ENV
+              value: "production"
+            - name: RAILS_LOG_TO_STDOUT
+              value: "true"
+            command:
+              - "/bin/bash"
+              - "-c"
+              - "bundle exec rake wprb:process_playlists"

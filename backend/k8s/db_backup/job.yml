@@ -1,0 +1,40 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: dbbackup
+  namespace: ultralist
+spec:
+  schedule: "0 */4 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+          - name: ultralist-prod-db-backup
+            image: gammons1/db_backup:latest
+            imagePullPolicy: Always
+            env:
+              - name: MYSQL_USER
+                value: root
+              - name: MYSQL_HOST
+                value: mysql
+              - name: MYSQL_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: mysql
+                    key: mysql-root-password
+              - name: AWS_DEFAULT_REGION
+                value: "us-east-2"
+              - name: AWS_ACCESS_KEY_ID
+                valueFrom:
+                  secretKeyRef:
+                    name: aws-s3-backup-creds
+                    key: aws-access-key-id
+              - name: AWS_SECRET_ACCESS_KEY
+                valueFrom:
+                  secretKeyRef:
+                    name: aws-s3-backup-creds
+                    key: aws-secret-access-key
+            command:
+            - "./backup.sh"

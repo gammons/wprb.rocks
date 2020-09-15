@@ -8,4 +8,6 @@ Rails.application.routes.draw do
 
   get "spotify/authorize", to: "spotify#authorize"
   get "spotify/refresh", to: "spotify#refresh"
+
+  get "/hb", to: "application#hb"
 end
