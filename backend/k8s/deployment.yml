@@ -1,5 +1,5 @@
 ---
-apiVersion: apps/v1
+apiVersion: apps/v2
 kind: Deployment
 metadata:
   name: wprb-rocks-deploy
@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: wprb-rocks-backend
-        image: gammons1/wprb-rocks:v1
+        image: gammons1/wprb-rocks:v2
         readinessProbe:
           httpGet:
             path: "/hb"
@@ -58,7 +58,7 @@ spec:
           - "-c"
           - "rm -f tmp/pids/server.pid && bin/rails s -p 3000 -b '0.0.0.0'"
 ---
-apiVersion: v1
+apiVersion: v2
 kind: Service
 metadata:
   name: wprb-rocks-backend-service
@@ -71,7 +71,7 @@ spec:
       port: 3000
       targetPort: 3000
 ---
-apiVersion: batch/v1beta1
+apiVersion: batch/v2beta1
 kind: CronJob
 metadata:
   name: show-getter
@@ -85,7 +85,7 @@ spec:
           restartPolicy: Never
           containers:
           - name: wprb-rocks-show-getter
-            image: gammons1/wprb-rocks:v1
+            image: gammons1/wprb-rocks:v2
             ports:
             - containerPort: 3000
             env:
