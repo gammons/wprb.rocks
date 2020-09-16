@@ -10,8 +10,8 @@ namespace :wprb do
 
   desc "Fetches WPRB playlists"
   task process_playlists: :environment do
-    pc = PlaylistCreator.new.retrieve
-    pc.process(pc.retrieve)
+    pc = PlaylistCreator.new
+    pc.process(pc.retrieve(1.day.ago.strftime("%Y-%m-%d"))
   end
 
   task retrieve_playlists: :environment do

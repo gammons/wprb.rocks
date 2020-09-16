@@ -7,7 +7,7 @@ class Result
     self.title = json["title"]
     self.dj_name = json["text"]
     self.url = json["url"]
-    self.start = json["start"]
+    self.start = Time.parse(json["start"])
   end
 
   def to_s
@@ -17,13 +17,19 @@ end
 
 class PlaylistCreator
   def retrieve(day = Time.now.strftime("%Y-%m-%d"))
+    day = Time.parse(day)
     epoch = (Time.now.to_f * 1000).to_i
-    time = CGI.escape(Time.parse(day).strftime("%Y-%m-%dT00:00:00"))
+    time = CGI.escape(day.strftime("%Y-%m-%dT00:00:00"))
+    end_time = CGI.escape((day + 24.hour).strftime("%Y-%m-%dT00:00:00"))
 
-    url = "https://spinitron.com/WPRB/calendar-feed?timeslot=6&start=#{time}&end=#{time}&_=#{epoch}"
+    url = "https://spinitron.com/WPRB/calendar-feed?timeslot=6&start=#{time}&end=#{end_time}&_=#{epoch}"
 
     resp = HTTP.get(url)
-    JSON.parse(resp.body.to_s).map { |r| Result.new(r) }
+
+    results = JSON.parse(resp.body.to_s).map { |r| Result.new(r) }
+
+    # spinitron has a bug where it sends results from a bunch of different dates, even though we only requested 1 date.
+    results.select { |r| r.start > day.beginning_of_day && r.start < day.end_of_day }
   end
 
   # process an array of Result objects
@@ -39,15 +45,17 @@ class PlaylistCreator
 
       next if dj.should_ignore?
 
+      url = "https://spinitron.com#{pl.url}"
+      spins = PlaylistPageProcessor.new.process(url)
+
+      next if spins.blank?
+
       playlist = Playlist.create(
         name: pl.title,
         dj: dj,
         spinitron_id: pl.id,
-        created_at: Time.parse(pl.start)
+        created_at: pl.start
       )
-
-      url = "https://spinitron.com#{pl.url}"
-      spins = PlaylistPageProcessor.new.process(url)
 
       spins.each do |spin|
         spotify_data = spotify.search(spin[:artist], spin[:song])
