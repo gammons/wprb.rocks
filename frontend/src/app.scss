@@ -26,6 +26,10 @@ $link: $pink;
 @import '../node_modules/bulma/sass/helpers/_all.sass';
 @import '../node_modules/bulma/sass/layout/_all.sass';
 
+a:hover {
+  color: $red;
+}
+
 .header {
 }
 .header-link {
