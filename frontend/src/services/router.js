@@ -16,7 +16,9 @@ const Routes = () => {
     <Router history={history}>
       <App>
         <Route exact={true} path="/show/:slug" component={ShowIndex} />
-        <Route exact={true} path="/show/:slug/:date" component={Playlist} />
+        <Route exact={true} path="/:date/show/:slug" component={Playlist} />
+        <Route exact={true} path="/:date" component={Shows} />
+
         <Route exact={true} path="/" component={Shows} />
       </App>
     </Router>

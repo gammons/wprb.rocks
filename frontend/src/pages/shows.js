@@ -5,6 +5,8 @@ import { Link } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons"
 
+import { subDays, addDays } from "date-fns"
+
 import { useQuery, gql } from "@apollo/client"
 
 import "./css/shows.css"
@@ -32,7 +34,12 @@ const NextDateButton = (props) => {
 }
 
 const Shows = (props: any) => {
-  const [date, setDate] = React.useState(new Date())
+  let date
+  if (props.match.params.date) {
+    date = new Date(props.match.params.date + "T12:00:00")
+  } else {
+    date = subDays(new Date(), 1)
+  }
 
   const q = gql`
     {
@@ -48,17 +55,14 @@ const Shows = (props: any) => {
     }
   `
   const { loading, error, data } = useQuery(q)
-
   const onSetPrevDay = () => {
-    const d = new Date()
-    d.setDate(date.getDate() - 1)
-    setDate(d)
+    const d = subDays(date, 1)
+    props.history.push(`/${queryDate(d)}`)
   }
 
   const onSetNextDay = () => {
-    const d = new Date()
-    d.setDate(date.getDate() + 1)
-    setDate(d)
+    const d = addDays(date, 1)
+    props.history.push(`/${queryDate(d)}`)
   }
 
   if (error) return <div>Error!</div>
