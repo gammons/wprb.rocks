@@ -28,9 +28,9 @@ module Types
 
     def playlists(slug: nil)
       if !slug.blank?
-        Playlist.where(slug: slug).order(:created_at, :desc)
+        Playlist.where(slug: slug).order(created_at: :desc)
       else
-        Playlist.order(:created_at, :desc)
+        Playlist.order(created_at: :desc)
       end
     end
 
