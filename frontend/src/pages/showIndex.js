@@ -42,7 +42,7 @@ const ShowIndex = (props: any) => {
             <li key={idx}>
               <Link
                 to={{
-                  pathname: `${playlist.date}/show/${playlist.slug}`,
+                  pathname: `/${playlist.date}/show/${playlist.slug}`,
                   state: { id: playlist.id },
                 }}
               >
