@@ -51,7 +51,7 @@ const Playlist = (props: any) => {
   const showName = data.playlist.name
   const djName = data.playlist.dj.name
 
-  const airDate = new Date(data.playlist.date)
+  const airDate = new Date(data.playlist.date + "T12:00:00")
   const prettyAirDate = airDate.toLocaleString("en-US", {
     year: "numeric",
     month: "short",

@@ -92,7 +92,7 @@ const Shows = (props: any) => {
               <li key={idx}>
                 <Link
                   to={{
-                    pathname: `/show/${playlist.slug}/${playlist.date}`,
+                    pathname: `/${playlist.date}/show/${playlist.slug}`,
                     state: { id: playlist.id },
                   }}
                 >
