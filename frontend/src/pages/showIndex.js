@@ -31,11 +31,11 @@ const ShowIndex = (props: any) => {
 
   return (
     <React.Fragment>
-      <h1>
+      <h2 className="title is-2 airdate-title">
         {showName} with {djName}
-      </h1>
+      </h2>
 
-      <h1>Airdates:</h1>
+      <h2 className="title is-2 airdate-title">Airdates:</h2>
       <ul>
         {data.playlists.map((playlist, idx) => {
           return (
