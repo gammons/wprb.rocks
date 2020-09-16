@@ -213,7 +213,7 @@ const Player = (props: Props) => {
           </div>
 
           {/* volume slider, always at end*/}
-          <div>
+          <div className="volume-slider">
             <VolumeSlider onSetVolume={onSetVolume} volume={volume} />
           </div>
         </div>

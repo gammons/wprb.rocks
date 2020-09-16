@@ -20,6 +20,7 @@
 }
 
 .trackInfo {
+  width: 33vw;
   display: flex;
   flex-direction: row;
 }
@@ -32,7 +33,6 @@
 }
 
 .artist-track-name {
-  max-width: 20vw;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -48,21 +48,23 @@
 }
 
 .controls {
-  flex-grow: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 33vw;
 }
 
 .control-buttons {
-  min-width: 200px;
+  width: 100%;
+  max-width: 200px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
 .progressBarHolder {
-  min-width: 200px;
+  width: 100%;
+  max-width: 300px;
   min-height: 10px;
   border: 1px solid #ccc;
   border-radius: 1px;
@@ -72,7 +74,7 @@
 .progressBar {
   height: 10px;
   cursor: pointer;
-  background-color: #333;
+  background-color: #ccc;
 }
 
 .playerButton {
@@ -99,4 +101,28 @@
 
 .artist-name {
   font-size: 14px;
+}
+
+.volume-slider {
+  width: 33vw;
+  display: flex;
+  justify-content: center;
+}
+
+@media only screen and (max-width: 600px) {
+  .volume-slider {
+    display: none;
+  }
+
+  .trackInfo {
+    width: 50vw;
+  }
+
+  .controls {
+    width: 50vw;
+  }
+
+  .albumCover {
+    display: none;
+  }
 }
