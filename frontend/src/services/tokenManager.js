@@ -9,7 +9,7 @@ const TokenManager = {
     return TokenManager.getAccessToken() ? true : false
   },
 
-  setAccessToken: token => {
+  setAccessToken: (token) => {
     window.localStorage.setItem("accessToken", token)
 
     const expiry = Date.now() + 1000 * 60 * 60
@@ -20,11 +20,11 @@ const TokenManager = {
     return window.localStorage.getItem("refreshToken")
   },
 
-  setRefreshToken: token => {
+  setRefreshToken: (token) => {
     window.localStorage.setItem("refreshToken", token)
   },
 
-  accessTokenFn: async cb => {
+  accessTokenFn: async (cb) => {
     const expires = TokenManager.getTokenExpires()
     if (expires && expires < Date.now()) {
       await TokenManager.refreshAccessToken()
@@ -49,10 +49,15 @@ const TokenManager = {
   },
 
   tokenRefresh: async () => {
+    const redirectUrl =
+      process.env.NODE_ENV === "development"
+        ? "http://localhost:3000"
+        : "https://api.wprb.rocks"
+
     const resp = await fetch(
-      `/.netlify/functions/spotifyRefresh?refresh_token=${TokenManager.getRefreshToken()}`,
+      `${redirectUrl}/spotify/refresh?token=${TokenManager.getRefreshToken()}`,
       {
-        method: "GET"
+        method: "GET",
       }
     )
 
@@ -65,7 +70,7 @@ const TokenManager = {
     window.localStorage.setItem("refreshToken", null)
     window.localStorage.setItem("accessToken", null)
     window.localStorage.setItem("tokenExpires", null)
-  }
+  },
 }
 
 export default TokenManager

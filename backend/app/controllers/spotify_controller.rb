@@ -7,22 +7,21 @@ class SpotifyController < ApplicationController
     args = {
       grant_type: "authorization_code",
       code: params[:code],
-      redirect_uri: (return_uri + "/spotify/authorize")
+      redirect_uri: (api_uri + "/spotify/authorize")
     }
 
-    call_spotify(args)
+    json = call_spotify(args)
+    redirect_to "#{frontend_uri}?#{json.to_query}"
   end
 
   def refresh
-    return_uri = Rails.env.development? ? "http://localhost:3000" : "https://api.wprb.rocks"
-
     args = {
       grant_type: "refresh_token",
       refresh_token: params[:token],
-      redirect_uri: (return_uri + "/spotify/authorize")
+      redirect_uri: (api_uri + "/spotify/authorize")
     }
 
-    call_spotify(args)
+    render json: call_spotify(args)
   end
 
   private
@@ -40,11 +39,14 @@ class SpotifyController < ApplicationController
     http.use_ssl = true
     resp = http.request(req)
 
-    json = JSON.parse(resp.body)
-    redirect_to "#{return_uri}?#{json.to_query}"
+    JSON.parse(resp.body)
   end
 
-  def return_uri
+  def api_uri
     Rails.env.development? ? "http://localhost:3000" : "https://api.wprb.rocks"
+  end
+
+  def frontend_uri
+    Rails.env.development? ? "http://localhost:3001" : "https://wprb.rocks"
   end
 end
