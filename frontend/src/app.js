@@ -1,10 +1,9 @@
 // @flow
 
 import React from "react"
-import { Link } from "react-router-dom"
 
-import SpotifyLoginButton from "./components/login/spotifyLoginButton"
 import Player from "./components/player"
+import Header from "./components/header"
 import getUrlParam from "./services/getUrlParam"
 import TokenManager from "./services/tokenManager"
 
@@ -55,28 +54,11 @@ const App = (props: Props) => {
 
   return (
     <PlaylistContext.Provider value={{ playlist, setPlaylist }}>
+      <Header
+        onSpotifyLoginClick={onSpotifyLoginClick}
+        isLoggedIn={isLoggedIn}
+      />
       <div className="app">
-        <section className="section header">
-          <div className="level">
-            <div className="level-left">
-              <Link to="/">
-                <img className="header-img" src="/wprb.png" />
-              </Link>
-              <h1 className="title is-1">
-                <Link to="/" className="header-link">
-                  Rocks!
-                </Link>
-              </h1>
-            </div>
-            <div className="level-right">
-              <SpotifyLoginButton
-                onClick={onSpotifyLoginClick}
-                isLoggedIn={isLoggedIn}
-              />
-            </div>
-          </div>
-        </section>
-
         <section className="section main">
           <div className="container">
             <div className="box">{props.children}</div>
