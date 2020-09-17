@@ -77,7 +77,7 @@ metadata:
   name: show-getter
   namespace: wprb-rocks
 spec:
-  schedule: "0 0 * * *"
+  schedule: "0 * * * *"
   jobTemplate:
     spec:
       template:
