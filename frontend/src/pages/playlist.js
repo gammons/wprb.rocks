@@ -14,7 +14,7 @@ import TokenManager from "../services/tokenManager"
 import "./css/playlist.css"
 
 const Playlist = (props: any) => {
-  const { setPlaylist } = React.useContext(PlaylistContext)
+  const { setPlaylist, setSongIndex } = React.useContext(PlaylistContext)
 
   const slug = props.match.params.slug
   const date = props.match.params.date
@@ -58,8 +58,9 @@ const Playlist = (props: any) => {
     day: "numeric",
   })
 
-  const onLoadPlaylist = () => {
+  const onLoadPlaylist = (idx = 0) => {
     if (TokenManager.hasAccessToken()) {
+      setSongIndex(idx)
       setPlaylist(data.playlist.songs.map((s) => s.spotifySongId))
     } else {
       alert("Please login with Spotify before loading playlists!")
@@ -77,7 +78,12 @@ const Playlist = (props: any) => {
       </h2>
 
       <div className="container has-text-centered">
-        <button onClick={onLoadPlaylist} className="button is-primary">
+        <button
+          onClick={() => {
+            onLoadPlaylist(0)
+          }}
+          className="button is-primary"
+        >
           <span className="icon">
             <FontAwesomeIcon icon={faPlay} />
           </span>
@@ -90,17 +96,13 @@ const Playlist = (props: any) => {
           return (
             <li className="track" key={idx}>
               <span className="tracknum">{idx + 1}.</span>
-              <img className="album-img" src={song.imageUrl} />
-              <p>
-                <span className="songname">{song.name}</span> by{" "}
-                <a
-                  target="_blank"
-                  rel="noreferrer"
-                  href={`https://open.spotify.com/artist/${song.spotifyArtistId}`}
-                >
-                  {song.artistName}
-                </a>
-              </p>
+              <a onClick={() => onLoadPlaylist(idx)}>
+                <img className="album-img" src={song.imageUrl} />
+              </a>
+              <a onClick={() => onLoadPlaylist(idx)}>
+                <span className="songname">{song.name}</span>
+              </a>
+              <p>&nbsp; by {song.artistName}</p>
             </li>
           )
         })}

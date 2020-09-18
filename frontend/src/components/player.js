@@ -21,7 +21,9 @@ type Props = {
 }
 
 const Player = (props: Props) => {
-  const { playlist } = React.useContext(PlaylistContext)
+  const { playlist, songIndex, setSongIndex } = React.useContext(
+    PlaylistContext
+  )
 
   const [isReady, setIsReady] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -32,9 +34,9 @@ const Player = (props: Props) => {
   const positionRef = useRef(position)
   positionRef.current = position
 
-  const [trackNum, setTrackNum] = useState(0)
   const [hasNextTrack, setHasNextTrack] = useState(false)
   const [artist, setArtist] = useState("")
+  const [artistId, setArtistId] = useState("")
   const [album, setAlbum] = useState("")
   const [trackTitle, setTrackTitle] = useState("")
   const [trackDuration, setTrackDuration] = useState(0)
@@ -55,12 +57,12 @@ const Player = (props: Props) => {
     aPlayer.addListener("playback_error", console.error)
 
     aPlayer.addListener("player_state_changed", (state) => {
+      setArtistId(state.track_window.current_track.artists[0].uri.split(":")[2])
       setArtist(state.track_window.current_track.artists[0].name)
       setAlbum(state.track_window.current_track.album.name)
       setTrackTitle(state.track_window.current_track.name)
       setTrackDuration(state.track_window.current_track.duration_ms)
       setAlbumImageURL(state.track_window.current_track.album.images[2].url)
-      setTrackNum(state.track_window.previous_tracks.length)
       setHasNextTrack(state.track_window.next_tracks.length > 0)
       setPosition(state.position)
 
@@ -108,21 +110,20 @@ const Player = (props: Props) => {
     if (playlist.length > 0 && isReady) {
       onStartPlay()
     }
-  }, [playlist.length])
+  }, [playlist.length, songIndex])
 
   const onStartPlay = () => {
     clearTimeout(timer.current)
-    spotifyPlayer.play(playlist, 0, 0).then(() => {
+    spotifyPlayer.play(playlist, songIndex, 0).then(() => {
       progressTick()
       setIsPlaying(true)
-      setTrackNum(0)
       setPosition(0)
     })
   }
 
   const onTogglePlay = () => {
     if (!isPlaying) {
-      spotifyPlayer.play(playlist, trackNum, position).then(() => {
+      spotifyPlayer.play(playlist, songIndex, position).then(() => {
         setIsPlaying(!isPlaying)
         progressTick()
       })
@@ -138,20 +139,20 @@ const Player = (props: Props) => {
   const onRequestNextTrack = () => {
     if (!hasNextTrack) return
     if (isPlaying) {
-      spotifyPlayer.play(playlist, trackNum + 1, 0)
+      spotifyPlayer.play(playlist, songIndex + 1, 0)
     }
     setPosition(0)
-    setTrackNum(trackNum + 1)
+    setSongIndex(songIndex + 1)
   }
 
   const onRequestPrevTrack = () => {
-    const trackToPlay = trackNum === 0 ? 0 : trackNum - 1
+    const trackToPlay = songIndex === 0 ? 0 : songIndex - 1
 
     if (isPlaying) {
       spotifyPlayer.play(playlist, trackToPlay, 0)
     }
     setPosition(0)
-    setTrackNum(trackToPlay)
+    setSongIndex(trackToPlay)
   }
 
   const onSetVolume = (ev) => {
@@ -168,7 +169,7 @@ const Player = (props: Props) => {
     const newPosition = trackDuration * percentage
     setPosition(newPosition)
     if (isPlaying) {
-      spotifyPlayer.play(playlist, trackNum, newPosition)
+      spotifyPlayer.play(playlist, songIndex, newPosition)
     }
   }
 
@@ -183,6 +184,7 @@ const Player = (props: Props) => {
               style={{ backgroundImage: `url(${albumImageURL})` }}
             />
             <ArtistAndTrack
+              artistId={artistId}
               artist={artist}
               trackTitle={trackTitle}
               album={album}

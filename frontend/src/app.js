@@ -39,6 +39,7 @@ const App = (props: Props) => {
     TokenManager.hasAccessToken()
   )
   const [playlist, setPlaylist] = React.useState([])
+  const [songIndex, setSongIndex] = React.useState(0)
 
   React.useEffect(() => {
     const _accessToken = getUrlParam("access_token")
@@ -53,7 +54,9 @@ const App = (props: Props) => {
   }, [])
 
   return (
-    <PlaylistContext.Provider value={{ playlist, setPlaylist }}>
+    <PlaylistContext.Provider
+      value={{ playlist, setPlaylist, songIndex, setSongIndex }}
+    >
       <div className="app">
         <Header
           onSpotifyLoginClick={onSpotifyLoginClick}
