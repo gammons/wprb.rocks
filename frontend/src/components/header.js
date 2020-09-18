@@ -28,6 +28,9 @@ const Header = (props: Props) => {
           />
         </div>
       </div>
+      <h1 className="subtitle is-5">
+        Listen to show playlists from WPRB, using Spotify
+      </h1>
     </section>
   )
 }
