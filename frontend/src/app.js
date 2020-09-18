@@ -54,11 +54,12 @@ const App = (props: Props) => {
 
   return (
     <PlaylistContext.Provider value={{ playlist, setPlaylist }}>
-      <Header
-        onSpotifyLoginClick={onSpotifyLoginClick}
-        isLoggedIn={isLoggedIn}
-      />
       <div className="app">
+        <Header
+          onSpotifyLoginClick={onSpotifyLoginClick}
+          isLoggedIn={isLoggedIn}
+        />
+
         <section className="section main">
           <div className="container">
             <div className="box">{props.children}</div>
