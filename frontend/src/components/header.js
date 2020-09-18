@@ -15,12 +15,9 @@ const Header = (props: Props) => {
     <section className="section header">
       <div className="level">
         <div className="level-left">
-          <Link to="/">
-            <img className="header-img" src="/wprb.png" />
-          </Link>
           <h1 className="title is-1">
             <Link to="/" className="header-link">
-              Rocks!
+              WPRB Rocks!
             </Link>
           </h1>
         </div>

@@ -16,6 +16,7 @@ $grey-light: $beige-light;
 $primary: $beige-light;
 $link: $pink;
 
+@import url('https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap');
 
 @import '../node_modules/bulma/sass/utilities/_all.sass';
 @import '../node_modules/bulma/sass/base/_all.sass';
@@ -33,6 +34,7 @@ a:hover {
 .header {
 }
 .header-link {
+  font-family: "Rock Salt", cursive;
 }
 .header-img {
   max-width: 150px;
