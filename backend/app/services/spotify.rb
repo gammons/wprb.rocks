@@ -6,7 +6,8 @@ class Spotify
   end
 
   def search(artist_name, track_name)
-    artist_name = filter_string(artist_name)
+    artist_name = filter_artist_string(artist_name)
+    track_name = filter_string(track_name)
 
     req = HTTP.headers("Authorization": "Bearer #{@access_token}").get("https://api.spotify.com/v1/search", params: { q: "artist:#{artist_name.downcase} track:#{track_name.downcase}", type: "track" })
     resp = JSON.parse(req.body.to_s)
@@ -76,10 +77,16 @@ class Spotify
     json["access_token"]
   end
 
+  def filter_artist_string(string)
+    filter_string(string).sub(/the /i,"")
+  end
+
   def filter_string(string)
-    string.
+    I18n.transliterate(string).
       sub(/&amp;/, "&").
       sub(/’/, "").
-      sub(/ EP/, "")
+      sub(/'/, "").
+      sub(/ EP/, "").
+      gsub(/\(.*\)/,"").strip
   end
 end
