@@ -1,44 +1,44 @@
 class Spotify
   def initialize
-    @client_id = ENV["SPOTIFY_CLIENT_ID"]
-    @client_secret = ENV["SPOTIFY_CLIENT_SECRET"]
+    @client_id = ENV['SPOTIFY_CLIENT_ID']
+    @client_secret = ENV['SPOTIFY_CLIENT_SECRET']
     @access_token = authorize
   end
 
   def search(artist_name, track_name)
     artist_name = filter_string(artist_name)
 
-    req = HTTP.headers("Authorization": "Bearer #{@access_token}").get("https://api.spotify.com/v1/search", params: { q: "artist:#{artist_name.downcase} track:#{track_name.downcase}", type: "track" })
+    req = HTTP.headers("Authorization": "Bearer #{@access_token}").get('https://api.spotify.com/v1/search',
+                                                                       params: {
+                                                                         q: "artist:#{artist_name.downcase} track:#{track_name.downcase}", type: 'track'
+                                                                       })
     resp = JSON.parse(req.body.to_s)
 
-    unless req.code.to_s.start_with?("2")
-      raise req.body
-    end
+    raise req.body unless req.code.to_s.start_with?('2')
 
-    resp["tracks"] && resp["tracks"]["items"] && resp["tracks"]["items"][0]
+    resp['tracks'] && resp['tracks']['items'] && resp['tracks']['items'][0]
   end
 
   def tracks(album_id); end
 
   def get_artist_id(artist_name)
-    req = HTTP.headers("Authorization": "Bearer #{@access_token}").get("https://api.spotify.com/v1/search", params: { q: artist_name, type: "artist" })
-    unless req.code.to_s.start_with?("2")
-      raise req.body
-    end
+    req = HTTP.headers("Authorization": "Bearer #{@access_token}").get('https://api.spotify.com/v1/search',
+                                                                       params: { q: artist_name, type: 'artist' })
+    raise req.body unless req.code.to_s.start_with?('2')
 
     @logger.debug("body is #{req.body}")
     resp = JSON.parse(req.body.to_s)
 
     spotify_artist_name = artist_name
-    if resp["artists"].class == Array && artist_name.split(" ").size > 1
-      spotify_artist_name = FuzzyMatch.new(resp["artists"].map { |r| r["name"] }, must_match_at_least_one_word: true).find(artist_name)
+    if resp['artists'].instance_of?(Array) && artist_name.split(' ').size > 1
+      spotify_artist_name = FuzzyMatch.new(resp['artists'].map do |r|
+                                             r['name']
+                                           end, must_match_at_least_one_word: true).find(artist_name)
     end
 
-    resp["artists"]["items"].each do |result|
+    resp['artists']['items'].each do |result|
       puts "Artist = #{result['name']}"
-      if result["name"].downcase == spotify_artist_name.downcase
-        return result["id"]
-      end
+      return result['id'] if result['name'].downcase == spotify_artist_name.downcase
     end
     nil
   end
@@ -49,37 +49,34 @@ class Spotify
 
     url = "https://api.spotify.com/v1/artists/#{artist_id}/albums?offset=0&limit=50"
     req = HTTP.headers("Authorization": "Bearer #{@access_token}").get(url)
-    unless req.code.to_s.start_with?("2")
-      raise req.body
-    end
+    raise req.body unless req.code.to_s.start_with?('2')
 
     @logger.debug("body is #{req.body}")
     resp = JSON.parse(req.body.to_s)
-    spotify_album_name = FuzzyMatch.new(resp["items"].map { |r| r["name"] }, must_match_at_least_one_word: true).find(album_name)
-    resp["items"].each do |result|
+    spotify_album_name = FuzzyMatch.new(resp['items'].map do |r|
+                                          r['name']
+                                        end, must_match_at_least_one_word: true).find(album_name)
+    resp['items'].each do |result|
       puts "Album = '#{result['name']}'"
-      if result["name"].downcase == (spotify_album_name || "").downcase
-        return result
-      end
+      return result if result['name'].downcase == (spotify_album_name || '').downcase
     end
     nil
   end
 
   def authorize
-    encoded = Base64.encode64("#{ENV['SPOTIFY_CLIENT_ID']}:#{ENV['SPOTIFY_CLIENT_SECRET']}").gsub(/\n/, "")
-    resp = HTTP.headers("Authorization": "Basic #{encoded}").post("https://accounts.spotify.com/api/token", form: { grant_type: "client_credentials" })
-    unless resp.code.to_s.start_with?("2")
-      raise resp.body
-    end
+    encoded = Base64.encode64("#{ENV['SPOTIFY_CLIENT_ID']}:#{ENV['SPOTIFY_CLIENT_SECRET']}").gsub(/\n/, '')
+    resp = HTTP.headers("Authorization": "Basic #{encoded}").post('https://accounts.spotify.com/api/token',
+                                                                  form: { grant_type: 'client_credentials' })
+    raise resp.body unless resp.code.to_s.start_with?('2')
 
     json = JSON.parse(resp.body.to_s)
-    json["access_token"]
+    json['access_token']
   end
 
   def filter_string(string)
-    string.
-      sub(/&amp;/, "&").
-      sub(/’/, "").
-      sub(/ EP/, "")
+    string
+      .sub(/&amp;/, '&')
+      .sub(/’/, '')
+      .sub(/ EP/, '')
   end
 end
