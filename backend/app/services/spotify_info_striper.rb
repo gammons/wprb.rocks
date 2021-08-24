@@ -1,6 +1,6 @@
 class SpotifyInfoStriper
   def initialize
-    @spotify = Spotify.new
+    @spotify = SpotifySearch::Searcher.new
   end
 
   # given an array of song models, populate the spotify info into them.
@@ -20,6 +20,6 @@ class SpotifyInfoStriper
       song.spotify_song_id = spotify_data['id']
     end
 
-    songs.reject {|s| s.spotify_song_id.nil? }
+    songs.reject { |s| s.spotify_song_id.nil? }
   end
 end

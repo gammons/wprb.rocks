@@ -1,9 +1,8 @@
-describe Spotify do
-  let(:spotify) { Spotify.new }
+require 'spotify_search/spotify_search'
+describe SpotifySearch::Searcher do
+  let(:spotify) { SpotifySearch::Searcher.new }
 
   it '#search' do
     results = spotify.search('Ween', 'Sarah')
-    byebug
-    sleep 0
   end
 end
