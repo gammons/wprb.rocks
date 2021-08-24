@@ -1,3 +1,12 @@
+GIT
+  remote: https://github.com/gammons/spotify-search.git
+  revision: 3f7fa23f0dff186206c941b61ef17a1c145f3fb7
+  branch: main
+  specs:
+    spotify-search (0.1.0)
+      http (~> 5.0)
+      i18n
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -213,6 +222,7 @@ DEPENDENCIES
   rack-cors
   rails (~> 6.0.3, >= 6.0.3.2)
   rspec-rails (~> 4.0.1)
+  spotify-search!
   spring
   spring-watcher-listen (~> 2.0.0)
   sqlite3 (~> 1.4)

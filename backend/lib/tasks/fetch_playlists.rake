@@ -1,21 +1,32 @@
+def process_results(from_time)
+  pc = PlaylistCreator.new
+  striper = SpotifyInfoStriper.new
+
+  results = pc.retrieve(from_time)
+  results.each do |result|
+    playlist = pc.playlist_from_result(result)
+    next if playlist.nil?
+
+    playlist.songs = striper.stripe(playlist.songs)
+    playlist.save
+  end
+end
+
 namespace :wprb do
-  desc "Fetches historical WPRB playlists"
+  desc 'Fetches historical WPRB playlists'
   task process_historical_playlists: :environment do
     7.downto(1).each do |n|
-      pc = PlaylistCreator.new
-      results = pc.retrieve(n.days.ago.strftime("%Y-%m-%d"))
-      pc.process(results)
+      process_results(n.days.ago.strftime('%Y-%m-%d'))
     end
   end
 
-  desc "Fetches WPRB playlists"
+  desc 'Fetches WPRB playlists'
   task process_playlists: :environment do
-    pc = PlaylistCreator.new
-    pc.process(pc.retrieve(0.day.ago.strftime("%Y-%m-%d")))
+    process_results(0.day.ago.strftime('%Y-%m-%d'))
   end
 
   task retrieve_playlists: :environment do
-    puts PlaylistCreator.new.retrieve
+    puts PlaylistCreator.new.retrieve(0.day.ago.strftime('%Y-%m-%d'))
   end
 
   task test: :environment do
