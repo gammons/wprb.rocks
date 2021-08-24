@@ -1,3 +1,5 @@
+require 'spotify_search/spotify_search'
+
 class SpotifyInfoStriper
   def initialize
     @spotify = SpotifySearch::Searcher.new
