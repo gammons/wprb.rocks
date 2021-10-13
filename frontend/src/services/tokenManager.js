@@ -2,6 +2,8 @@
 
 const TokenManager = {
   getAccessToken: () => {
+    if (window.localStorage.getItem("accessToken") === "undefined") return null
+
     return window.localStorage.getItem("accessToken")
   },
 
@@ -49,13 +51,8 @@ const TokenManager = {
   },
 
   tokenRefresh: async () => {
-    const redirectUrl =
-      process.env.NODE_ENV === "development"
-        ? "http://localhost:3000"
-        : "https://api.wprb.rocks"
-
     const resp = await fetch(
-      `${redirectUrl}/spotify/refresh?token=${TokenManager.getRefreshToken()}`,
+      `/.netlify/functions/spotifyRefresh?refresh_token=${TokenManager.getRefreshToken()}`,
       {
         method: "GET",
       }
@@ -67,9 +64,9 @@ const TokenManager = {
   },
 
   clearTokens: () => {
-    window.localStorage.setItem("refreshToken", null)
-    window.localStorage.setItem("accessToken", null)
-    window.localStorage.setItem("tokenExpires", null)
+    window.localStorage.removeItem("refreshToken")
+    window.localStorage.removeItem("accessToken")
+    window.localStorage.removeItem("tokenExpires")
   },
 }
 
