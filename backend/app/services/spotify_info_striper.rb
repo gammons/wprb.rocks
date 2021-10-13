@@ -20,6 +20,7 @@ class SpotifyInfoStriper
       song.spotify_artist_id = spotify_data['artists'][0]['id']
       song.spotify_album_id = spotify_data['album']['id']
       song.spotify_song_id = spotify_data['id']
+      song.image_url = spotify_data['album']['images'][1]['url']
     end
 
     songs.reject { |s| s.spotify_song_id.nil? }
