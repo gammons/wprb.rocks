@@ -51,8 +51,13 @@ const TokenManager = {
   },
 
   tokenRefresh: async () => {
+    const redirectUrl =
+      process.env.NODE_ENV === "development"
+        ? "http://localhost:3000"
+        : "https://api.wprb.rocks"
+
     const resp = await fetch(
-      `/.netlify/functions/spotifyRefresh?refresh_token=${TokenManager.getRefreshToken()}`,
+      `/${redirectUrl}/functions/spotifyRefresh?refresh_token=${TokenManager.getRefreshToken()}`,
       {
         method: "GET",
       }
