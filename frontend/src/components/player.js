@@ -21,9 +21,8 @@ type Props = {
 }
 
 const Player = (props: Props) => {
-  const { playlist, songIndex, setSongIndex } = React.useContext(
-    PlaylistContext
-  )
+  const { playlist, songIndex, setSongIndex } =
+    React.useContext(PlaylistContext)
 
   const [isReady, setIsReady] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
