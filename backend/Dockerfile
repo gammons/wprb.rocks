@@ -1,4 +1,4 @@
-FROM ruby:2.7.1
+FROM ruby:2.7.5
 
 RUN apt-get update -qq
 RUN curl -sL https://deb.nodesource.com/setup_11.x | bash
