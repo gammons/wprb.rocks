@@ -19,6 +19,7 @@
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
+    "react-spotify-web-playback": "^0.9.1",
     "sass": "^1.49.0"
   },
   "scripts": {
@@ -47,6 +48,8 @@
     "eslint-plugin-react": "^7.20.6",
     "flow": "^0.2.3",
     "flow-bin": "^0.133.0",
-    "prettier": "^2.1.1"
+    "prettier": "^2.1.1",
+    "ts-server": "^0.0.15",
+    "typescript": "^4.5.4"
   }
 }
