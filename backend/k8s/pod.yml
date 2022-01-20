@@ -7,7 +7,7 @@ spec:
   restartPolicy: Never
   containers:
   - name: wprb-rocks-pod
-    image: gammons1/wprb-rocks:v14
+    image: gammons1/wprb-rocks:v15
     env:
     - name: DATABASE_URL
       valueFrom:
