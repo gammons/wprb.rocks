@@ -1,5 +1,3 @@
-// @flow
-
 const TokenManager = {
   getAccessToken: () => {
     if (window.localStorage.getItem("accessToken") === "undefined") return null
@@ -11,22 +9,22 @@ const TokenManager = {
     return TokenManager.getAccessToken() ? true : false
   },
 
-  setAccessToken: (token) => {
+  setAccessToken: (token: string) => {
     window.localStorage.setItem("accessToken", token)
 
     const expiry = Date.now() + 1000 * 60 * 60
-    window.localStorage.setItem("tokenExpires", expiry)
+    window.localStorage.setItem("tokenExpires", expiry.toString())
   },
 
   getRefreshToken: () => {
     return window.localStorage.getItem("refreshToken")
   },
 
-  setRefreshToken: (token) => {
+  setRefreshToken: (token: string) => {
     window.localStorage.setItem("refreshToken", token)
   },
 
-  accessTokenFn: async (cb) => {
+  accessTokenFn: async (cb: (token: string) => {}) => {
     const expires = TokenManager.getTokenExpires()
     if (expires && expires < Date.now()) {
       await TokenManager.refreshAccessToken()

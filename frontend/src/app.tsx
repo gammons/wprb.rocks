@@ -1,8 +1,5 @@
-// @flow
-
 import React from "react"
 
-import Player from "./components/player"
 import Header from "./components/header"
 import getUrlParam from "./services/getUrlParam"
 import TokenManager from "./services/tokenManager"
@@ -12,7 +9,7 @@ import PlaylistContext from "./components/playlistContext"
 import "./app.scss"
 
 type Props = {
-  children?: React.Node,
+  children?: JSX.Element[]
 }
 
 const redirectUrl =
@@ -69,9 +66,7 @@ const App = (props: Props) => {
           </div>
         </section>
 
-        <section className="section player">
-          <Player accessTokenFn={TokenManager.accessTokenFn} />
-        </section>
+        <section className="section player"></section>
       </div>
     </PlaylistContext.Provider>
   )

@@ -1,12 +1,10 @@
-// @flow
 import React from "react"
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faSpotify } from "@fortawesome/free-brands-svg-icons"
 
 type Props = {
-  onClick: () => void,
-  isLoggedIn: boolean,
+  onClick: () => void
+  isLoggedIn: boolean
 }
 
 const SpotifyLoginButton = (props: Props) => {

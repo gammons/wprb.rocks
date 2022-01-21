@@ -1,13 +1,11 @@
-// @flow
-
 import React from "react"
 import { Link } from "react-router-dom"
 
 import SpotifyLoginButton from "./login/spotifyLoginButton"
 
 type Props = {
-  isLoggedIn: boolean,
-  onSpotifyLoginClick: () => void,
+  isLoggedIn: boolean
+  onSpotifyLoginClick: () => void
 }
 
 const Header = (props: Props) => {

@@ -1,12 +1,10 @@
-// @flow
-
 import React from "react"
 
 const PlaylistContext = React.createContext({
   playlist: [],
-  setPlaylist: () => {},
+  setPlaylist: (state: never[]) => {},
   songIndex: 0,
-  setSongIndex: () => {},
+  setSongIndex: (state: number) => {},
 })
 
 export default PlaylistContext
