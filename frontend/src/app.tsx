@@ -53,7 +53,9 @@ const App = (props: Props) => {
     setIsLoggedIn(true)
   }, [])
 
-  console.log("playlist", playlist)
+  React.useEffect(() => {
+    TokenManager.refreshAccessToken()
+  }, [])
 
   return (
     <PlaylistContext.Provider
@@ -72,7 +74,7 @@ const App = (props: Props) => {
         </section>
 
         <section className="section player">
-          {TokenManager.getAccessToken() && (
+          {TokenManager.hasAccessToken() && (
             <SpotifyPlayer
               token={TokenManager.getAccessToken()}
               autoPlay={true}
@@ -88,7 +90,6 @@ const App = (props: Props) => {
                 loaderColor: "#333",
                 trackNameColor: "#ccc",
                 trackArtistColor: "#aaa",
-                height: "80px",
               }}
             />
           )}

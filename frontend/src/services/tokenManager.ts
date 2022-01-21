@@ -6,7 +6,10 @@ const TokenManager = {
   },
 
   hasAccessToken: () => {
-    return TokenManager.getAccessToken() ? true : false
+    return (
+      TokenManager.getAccessToken() !== null &&
+      !TokenManager.isAccessTokenExpired()
+    )
   },
 
   setAccessToken: (token: string) => {
@@ -24,19 +27,25 @@ const TokenManager = {
     window.localStorage.setItem("refreshToken", token)
   },
 
-  accessTokenFn: async (cb: (token: string) => {}) => {
-    const expires = TokenManager.getTokenExpires()
-    if (expires && expires < Date.now()) {
-      await TokenManager.refreshAccessToken()
+  refreshToken() {
+    if (!TokenManager.hasAccessToken()) {
+      return
     }
 
-    if (TokenManager.getAccessToken()) cb(TokenManager.getAccessToken())
+    if (TokenManager.isAccessTokenExpired()) {
+      TokenManager.refreshAccessToken()
+    }
   },
 
   getTokenExpires: () => {
     const expires = window.localStorage.getItem("tokenExpires")
     if (expires) return parseInt(expires)
     return null
+  },
+
+  isAccessTokenExpired: () => {
+    const expires = TokenManager.getTokenExpires()
+    return expires && expires < Date.now()
   },
 
   refreshAccessToken: async () => {
