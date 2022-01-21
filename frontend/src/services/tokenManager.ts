@@ -1,5 +1,5 @@
 const TokenManager = {
-  getAccessToken: () => {
+  getAccessToken: (): string => {
     if (window.localStorage.getItem("accessToken") === "undefined") return null
 
     return window.localStorage.getItem("accessToken")

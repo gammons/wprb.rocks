@@ -1,4 +1,5 @@
 import React from "react"
+import SpotifyPlayer from "react-spotify-web-playback"
 
 import Header from "./components/header"
 import getUrlParam from "./services/getUrlParam"
@@ -24,7 +25,9 @@ const onSpotifyLoginClick = () => {
   args.push(`client_id=${SPOTIFY_CLIENT_ID}`)
   args.push("response_type=code")
   args.push(`redirect_uri=${redirectUrl}`)
-  args.push("scope=streaming,user-read-email,user-read-private")
+  args.push(
+    "scope=streaming,user-read-email,user-read-private,user-read-playback-state,user-modify-playback-state,user-library-read,user-library-modify"
+  )
 
   window.location.replace(
     `https://accounts.spotify.com/authorize?${args.join("&")}`
@@ -50,6 +53,8 @@ const App = (props: Props) => {
     setIsLoggedIn(true)
   }, [])
 
+  console.log("playlist", playlist)
+
   return (
     <PlaylistContext.Provider
       value={{ playlist, setPlaylist, songIndex, setSongIndex }}
@@ -66,7 +71,28 @@ const App = (props: Props) => {
           </div>
         </section>
 
-        <section className="section player"></section>
+        <section className="section player">
+          {TokenManager.getAccessToken() && (
+            <SpotifyPlayer
+              token={TokenManager.getAccessToken()}
+              autoPlay={true}
+              play={playlist.length > 0}
+              uris={playlist}
+              styles={{
+                activeColor: "#333",
+                color: "#aaa",
+                bgColor: "#222",
+                sliderColor: "#333",
+                sliderHandleColor: "#aaa",
+                sliderTrackColor: "#666",
+                loaderColor: "#333",
+                trackNameColor: "#ccc",
+                trackArtistColor: "#aaa",
+                height: "80px",
+              }}
+            />
+          )}
+        </section>
       </div>
     </PlaylistContext.Provider>
   )

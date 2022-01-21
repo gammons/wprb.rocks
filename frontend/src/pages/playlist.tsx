@@ -59,7 +59,9 @@ const Playlist = (props: any) => {
   const onLoadPlaylist = (idx = 0) => {
     if (TokenManager.hasAccessToken()) {
       setSongIndex(idx)
-      setPlaylist(data.playlist.songs.map((s) => s.spotifySongId))
+      setPlaylist(
+        data.playlist.songs.map((s) => `spotify:track:${s.spotifySongId}`)
+      )
     } else {
       alert("Please login with Spotify before loading playlists!")
     }
