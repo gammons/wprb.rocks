@@ -67,13 +67,15 @@ GEM
       zeitwerk (~> 2.2, >= 2.2.2)
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
-    bootsnap (1.7.7)
-      msgpack (~> 1.0)
+    bootsnap (1.16.0)
+      msgpack (~> 1.2)
     builder (3.2.4)
     byebug (11.1.3)
     concurrent-ruby (1.1.9)
     crass (1.0.6)
     diff-lcs (1.4.4)
+    dockerfile-rails (1.5.2)
+      rails
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
     dotenv (2.7.6)
@@ -118,12 +120,13 @@ GEM
     mini_mime (1.1.1)
     mini_portile2 (2.6.1)
     minitest (5.14.4)
-    msgpack (1.4.2)
+    msgpack (1.7.2)
     mysql2 (0.5.3)
     nio4r (2.5.8)
     nokogiri (1.12.3)
       mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
+    pg (1.5.3)
     public_suffix (4.0.6)
     puma (4.3.8)
       nio4r (~> 2.0)
@@ -210,6 +213,7 @@ PLATFORMS
 DEPENDENCIES
   bootsnap (>= 1.4.2)
   byebug
+  dockerfile-rails (>= 1.5)
   dotenv-rails
   fuzzy_match
   graphiql-rails
@@ -218,6 +222,7 @@ DEPENDENCIES
   listen (~> 3.2)
   mysql2
   nokogiri
+  pg (~> 1.5)
   puma (~> 4.1)
   rack-cors
   rails (~> 6.0.3, >= 6.0.3.2)
@@ -229,7 +234,7 @@ DEPENDENCIES
   tzinfo-data
 
 RUBY VERSION
-   ruby 2.7.5p203
+   ruby 3.0.6p216
 
 BUNDLED WITH
-   2.1.4
+   2.2.33

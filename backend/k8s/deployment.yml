@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: wprb-rocks-backend
-        image: gammons1/wprb-rocks:v15
+        image: gammons1/wprb-rocks:v51
         # readinessProbe:
         #   httpGet:
         #     path: "/hb"
@@ -69,6 +69,8 @@ metadata:
   name: wprb-rocks-backend-service
   namespace: wprb-rocks
 spec:
+  loadBalancerIP: 192.168.1.90
+  type: LoadBalancer
   selector:
     app: wprb-rocks-backend
   ports:
@@ -76,7 +78,7 @@ spec:
       port: 3000
       targetPort: 3000
 ---
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: show-getter
@@ -90,7 +92,7 @@ spec:
           restartPolicy: Never
           containers:
           - name: wprb-rocks-show-getter
-            image: gammons1/wprb-rocks:v15
+            image: gammons1/wprb-rocks:v51
             ports:
             - containerPort: 3000
             env:

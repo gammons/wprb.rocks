@@ -1,4 +1,4 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: wprb-rocks-ingress
@@ -13,13 +13,19 @@ spec:
     http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
-          serviceName: wprb-rocks-backend-service
-          servicePort: 3000
+          service:
+            name: wprb-rocks-backend-service
+            port:
+              number: 3000
       - path: /ws
+        pathType: Prefix
         backend:
-          serviceName: wprb-rocks-websockets-service
-          servicePort: 8080
+          service:
+            name: wprb-rocks-websockets-service
+            port:
+              number: 8080
   tls:
   - hosts:
     - api.wprb.rocks
