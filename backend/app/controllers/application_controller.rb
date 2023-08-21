@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::API
   def hb
-    head :ok
+    render plain: 'up'
   end
 end
