@@ -121,6 +121,7 @@ GEM
     mini_portile2 (2.6.1)
     minitest (5.14.4)
     msgpack (1.7.2)
+    mysql2 (0.5.3)
     nio4r (2.5.8)
     nokogiri (1.12.3)
       mini_portile2 (~> 2.6.1)
@@ -218,6 +219,7 @@ DEPENDENCIES
   graphql
   http
   listen (~> 3.2)
+  mysql2
   nokogiri
   puma (~> 4.1)
   rack-cors

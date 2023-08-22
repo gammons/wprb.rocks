@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: wprb-rocks-backend
-        image: gammons1/wprb-rocks:v51
+        image: gammons1/wprb-rocks:v54
         # readinessProbe:
         #   httpGet:
         #     path: "/hb"
@@ -92,7 +92,7 @@ spec:
           restartPolicy: Never
           containers:
           - name: wprb-rocks-show-getter
-            image: gammons1/wprb-rocks:v51
+            image: gammons1/wprb-rocks:v54
             ports:
             - containerPort: 3000
             env:
