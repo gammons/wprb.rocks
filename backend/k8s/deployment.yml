@@ -69,7 +69,6 @@ metadata:
   name: wprb-rocks-backend-service
   namespace: wprb-rocks
 spec:
-  loadBalancerIP: 192.168.1.90
   type: LoadBalancer
   selector:
     app: wprb-rocks-backend

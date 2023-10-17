@@ -4,7 +4,7 @@ metadata:
   name: wprb-rocks-ingress
   namespace: wprb-rocks
   annotations:
-    kubernetes.io/ingress.class: "nginx"
+    kubernetes.io/ingress.class: traefik
     cert-manager.io/cluster-issuer: letsencrypt-prod
 
 spec:
