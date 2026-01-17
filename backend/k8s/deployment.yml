@@ -7,7 +7,7 @@ metadata:
   labels:
     app: wprb-rocks-backend
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: wprb-rocks-backend
@@ -16,9 +16,12 @@ spec:
       labels:
         app: wprb-rocks-backend
     spec:
+      imagePullSecrets:
+      - name: ghcr-secret
       containers:
       - name: wprb-rocks-backend
-        image: gammons1/wprb-rocks:v54
+        image: ghcr.io/gammons/wprb-rocks:latest
+        imagePullPolicy: Always
         # readinessProbe:
         #   httpGet:
         #     path: "/hb"
@@ -33,12 +36,10 @@ spec:
         #   periodSeconds: 5
         ports:
         - containerPort: 3000
+        volumeMounts:
+        - name: sqlite-storage
+          mountPath: /myapp/data
         env:
-        - name: DATABASE_URL
-          valueFrom:
-            secretKeyRef:
-              name: database-url
-              key: database-url
         - name: SPOTIFY_CLIENT_ID
           valueFrom:
             secretKeyRef:
@@ -61,7 +62,11 @@ spec:
         command:
           - "/bin/bash"
           - "-c"
-          - "rm -f tmp/pids/server.pid && bin/rails s -p 3000 -b '0.0.0.0'"
+          - "rm -f tmp/pids/server.pid && bin/rails db:migrate && bin/rails s -p 3000 -b '0.0.0.0'"
+      volumes:
+      - name: sqlite-storage
+        persistentVolumeClaim:
+          claimName: wprb-rocks-sqlite-pvc
 ---
 apiVersion: v1
 kind: Service
@@ -89,17 +94,18 @@ spec:
       template:
         spec:
           restartPolicy: Never
+          imagePullSecrets:
+          - name: ghcr-secret
           containers:
           - name: wprb-rocks-show-getter
-            image: gammons1/wprb-rocks:v54
+            image: ghcr.io/gammons/wprb-rocks:latest
+            imagePullPolicy: Always
             ports:
             - containerPort: 3000
+            volumeMounts:
+            - name: sqlite-storage
+              mountPath: /myapp/data
             env:
-            - name: DATABASE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: database-url
-                  key: database-url
             - name: SPOTIFY_CLIENT_ID
               valueFrom:
                 secretKeyRef:
@@ -123,3 +129,7 @@ spec:
               - "/bin/bash"
               - "-c"
               - "bundle exec rake wprb:process_playlists"
+          volumes:
+          - name: sqlite-storage
+            persistentVolumeClaim:
+              claimName: wprb-rocks-sqlite-pvc

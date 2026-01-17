@@ -11,7 +11,7 @@ class SpotifyController < ApplicationController
     }
 
     json = call_spotify(args)
-    redirect_to "#{frontend_uri}?#{json.to_query}"
+    redirect_to "#{frontend_uri}?#{json.to_query}", allow_other_host: true
   end
 
   def refresh

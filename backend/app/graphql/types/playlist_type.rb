@@ -7,8 +7,6 @@ module Types
     field :timeslot, String, null: true
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
-    field :name, String, null: true
-    field :timeslot, String, null: true
     field :songs, [Types::SongType], null: true
     field :dj, Types::DjType, null: true
     field :slug, String, null: false
