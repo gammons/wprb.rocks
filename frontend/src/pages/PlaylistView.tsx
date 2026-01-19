@@ -1,11 +1,11 @@
 import { useParams, Link } from 'react-router-dom'
 import { useQuery } from '@apollo/client'
-import { GET_PLAYLIST } from '@/graphql/queries'
+import { GET_PLAYLIST, GET_PLAYLISTS_BY_DATE } from '@/graphql/queries'
 import PlaylistHeader from '@/components/playlist/PlaylistHeader'
 import TrackList from '@/components/playlist/TrackList'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { usePlayer } from '@/context/PlayerContext'
 
@@ -17,6 +17,11 @@ export default function PlaylistView() {
   const { loading, error, data } = useQuery(GET_PLAYLIST, {
     variables: { slug, date },
     skip: !slug || !date,
+  })
+
+  const { data: dayData } = useQuery(GET_PLAYLISTS_BY_DATE, {
+    variables: { date },
+    skip: !date,
   })
 
   if (loading) {
@@ -96,14 +101,52 @@ export default function PlaylistView() {
     playTracks(tracks, index)
   }
 
+  // Find prev/next shows for navigation
+  const dayPlaylists = dayData?.playlistsByDate || []
+  const currentIndex = dayPlaylists.findIndex((p: { slug: string }) => p.slug === slug)
+  const prevPlaylist = currentIndex > 0 ? dayPlaylists[currentIndex - 1] : null
+  const nextPlaylist = currentIndex < dayPlaylists.length - 1 ? dayPlaylists[currentIndex + 1] : null
+
   return (
     <div>
-      <Link to={`/${date}`}>
-        <Button variant="ghost" size="sm" className="mb-4">
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back
-        </Button>
-      </Link>
+      <div className="flex items-center justify-between mb-4">
+        <Link to={`/${date}`}>
+          <Button variant="ghost" size="sm">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back
+          </Button>
+        </Link>
+
+        <div className="flex items-center gap-2">
+          {prevPlaylist ? (
+            <Link to={`/${date}/show/${prevPlaylist.slug}`}>
+              <Button variant="outline" size="sm" className="gap-1">
+                <ChevronLeft className="h-4 w-4" />
+                <span className="hidden sm:inline">Previous show</span>
+              </Button>
+            </Link>
+          ) : (
+            <Button variant="outline" size="sm" disabled className="gap-1">
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+          )}
+          {nextPlaylist ? (
+            <Link to={`/${date}/show/${nextPlaylist.slug}`}>
+              <Button variant="outline" size="sm" className="gap-1">
+                <span className="hidden sm:inline">Next show</span>
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </Link>
+          ) : (
+            <Button variant="outline" size="sm" disabled className="gap-1">
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
+
+        {/* Spacer to balance the layout */}
+        <div className="w-[70px]" />
+      </div>
 
       <PlaylistHeader
         name={playlistData.name}

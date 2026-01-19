@@ -51,7 +51,7 @@ export default function Header({ onAboutClick }: HeaderProps) {
           >
             <ChevronLeft className="h-5 w-5" />
           </Button>
-          <span className="text-sm text-text-secondary min-w-[100px] text-center">
+          <span className="text-base font-medium text-text-primary min-w-[120px] text-center">
             {format(currentDate, 'MMM d, yyyy')}
           </span>
           <Button

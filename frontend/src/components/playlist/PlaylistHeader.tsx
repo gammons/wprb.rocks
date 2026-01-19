@@ -49,11 +49,11 @@ export default function PlaylistHeader({
           {name}
         </h1>
         {djName && (
-          <p className="text-text-secondary mb-1">with {djName}</p>
+          <p className="text-lg text-text-secondary mb-1">with {djName}</p>
         )}
         <p className="text-sm text-text-secondary mb-4">
           {displayDate} • {trackCount} tracks •{' '}
-          <Link to={`/show/${slug}`} className="hover:underline hover:text-text-primary">
+          <Link to={`/show/${slug}`} className="text-primary underline hover:text-primary/80">
             See other airdates
           </Link>
         </p>
