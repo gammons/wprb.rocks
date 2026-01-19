@@ -37,7 +37,7 @@ export default function AboutModal({ isOpen, onClose }: AboutModalProps) {
           <p className="text-text-secondary flex items-center justify-center gap-1">
             Made with <Heart className="h-4 w-4 text-red-500 fill-red-500" /> by{' '}
             <a
-              href="https://github.com/gammons"
+              href="https://github.com/gammons/wprb.rocks"
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary hover:underline"
