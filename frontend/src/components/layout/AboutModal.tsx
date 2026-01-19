@@ -1,5 +1,4 @@
 import { X, Heart } from 'lucide-react'
-import { cn } from '@/lib/utils'
 
 interface AboutModalProps {
   isOpen: boolean
