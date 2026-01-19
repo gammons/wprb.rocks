@@ -8,6 +8,7 @@ export const PLAYLIST_FRAGMENT = gql`
     date
     timeslot
     imageUrl
+    synopsis
     dj {
       id
       name

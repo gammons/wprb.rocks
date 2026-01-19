@@ -10,6 +10,7 @@ interface PlaylistHeaderProps {
   djName?: string
   trackCount: number
   imageUrl?: string
+  synopsis?: string
   onPlay: () => void
   isPlayable: boolean
 }
@@ -21,6 +22,7 @@ export default function PlaylistHeader({
   djName,
   trackCount,
   imageUrl,
+  synopsis,
   onPlay,
   isPlayable,
 }: PlaylistHeaderProps) {
@@ -55,6 +57,24 @@ export default function PlaylistHeader({
             See other airdates
           </Link>
         </p>
+        {synopsis && (
+          <div className="mb-4 text-sm">
+            {synopsis.split('\n').map((line, i) => {
+              if (line.startsWith('Genre:')) {
+                return (
+                  <span key={i} className="inline-block bg-primary/20 text-primary px-2 py-0.5 rounded text-xs font-medium mr-2">
+                    {line.replace('Genre: ', '')}
+                  </span>
+                )
+              }
+              return (
+                <span key={i} className="text-text-secondary italic">
+                  {line}
+                </span>
+              )
+            })}
+          </div>
+        )}
         <div>
           <Button
             size="lg"

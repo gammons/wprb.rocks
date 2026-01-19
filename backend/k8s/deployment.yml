@@ -59,6 +59,11 @@ spec:
             secretKeyRef:
               name: rails-secret
               key: rails-secret
+        - name: ANTHROPIC_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: anthropic-secret
+              key: api-key
         command:
           - "/bin/bash"
           - "-c"
@@ -125,6 +130,11 @@ spec:
                 secretKeyRef:
                   name: rails-secret
                   key: rails-secret
+            - name: ANTHROPIC_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: anthropic-secret
+                  key: api-key
             command:
               - "/bin/bash"
               - "-c"
