@@ -47,6 +47,6 @@ class SpotifyController < ApplicationController
   end
 
   def frontend_uri
-    Rails.env.development? ? 'http://localhost:3001' : 'https://wprb.rocks'
+    Rails.env.development? ? 'http://localhost:5173' : 'https://wprb.rocks'
   end
 end
