@@ -4,7 +4,7 @@ import { GET_PLAYLISTS_BY_SLUG } from '@/graphql/queries'
 import EpisodeCard from '@/components/show/EpisodeCard'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, Music } from 'lucide-react'
+import { ArrowLeft, Radio } from 'lucide-react'
 
 export default function ShowView() {
   const { slug } = useParams()
@@ -17,13 +17,8 @@ export default function ShowView() {
   if (loading) {
     return (
       <div>
-        <div className="flex items-center gap-6 mb-8">
-          <Skeleton className="w-48 h-48 rounded-md" />
-          <div className="space-y-3">
-            <Skeleton className="h-8 w-64" />
-            <Skeleton className="h-4 w-32" />
-          </div>
-        </div>
+        <Skeleton className="h-8 w-48 mb-2" />
+        <Skeleton className="h-5 w-32 mb-6" />
         <div className="space-y-2">
           {Array.from({ length: 5 }).map((_, i) => (
             <Skeleton key={i} className="h-16 w-full" />
@@ -69,28 +64,23 @@ export default function ShowView() {
         </Button>
       </Link>
 
-      <div className="flex flex-col md:flex-row items-center md:items-end gap-6 mb-8">
-        <div className="w-48 h-48 bg-gradient-to-br from-primary/20 to-surface rounded-md flex items-center justify-center shadow-xl">
-          <Music className="h-24 w-24 text-primary" />
+      <div className="mb-6">
+        <div className="flex items-center gap-2 text-text-muted text-sm mb-1">
+          <Radio className="h-4 w-4" />
+          <span>Show</span>
         </div>
-        <div className="text-center md:text-left">
-          <span className="text-xs uppercase tracking-wider text-text-secondary mb-2 block">
-            Show
-          </span>
-          <h1 className="text-3xl md:text-5xl font-bold text-text-primary mb-2">
-            {showName}
-          </h1>
-          {djName && (
-            <p className="text-text-secondary">with {djName}</p>
-          )}
-          <p className="text-sm text-text-muted mt-2">
-            {playlists.length} episode{playlists.length !== 1 ? 's' : ''}
-          </p>
-        </div>
+        <h1 className="text-2xl md:text-4xl font-bold text-text-primary">
+          {showName}
+        </h1>
+        {djName && (
+          <p className="text-text-secondary mt-1">with {djName}</p>
+        )}
+        <p className="text-sm text-text-muted mt-1">
+          {playlists.length} episode{playlists.length !== 1 ? 's' : ''}
+        </p>
       </div>
 
-      <h2 className="text-xl font-bold text-text-primary mb-4">Episodes</h2>
-      <div className="space-y-2">
+      <div className="space-y-1">
         {playlists.map((playlist: {
           id: string
           date: string
