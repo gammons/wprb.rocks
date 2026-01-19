@@ -12,7 +12,7 @@ import { usePlayer } from '@/context/PlayerContext'
 export default function PlaylistView() {
   const { date, slug } = useParams()
   const { isAuthenticated } = useAuth()
-  const { loadPlaylistFromTracks, currentTrack } = usePlayer()
+  const { playTracks, currentTrack } = usePlayer()
 
   const { loading, error, data } = useQuery(GET_PLAYLIST, {
     variables: { slug, date },
@@ -85,7 +85,7 @@ export default function PlaylistView() {
       alert('Please login with Spotify to play music!')
       return
     }
-    loadPlaylistFromTracks(tracks, 0)
+    playTracks(tracks, 0)
   }
 
   const handleTrackClick = (index: number) => {
@@ -93,7 +93,7 @@ export default function PlaylistView() {
       alert('Please login with Spotify to play music!')
       return
     }
-    loadPlaylistFromTracks(tracks, index)
+    playTracks(tracks, index)
   }
 
   return (

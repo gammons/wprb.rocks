@@ -1,78 +1,114 @@
-import React, { createContext, useContext, useState, useCallback } from 'react'
-import type { CallbackState } from 'react-spotify-web-playback'
+import React, { createContext, useContext, useCallback } from 'react'
+import { useAuth } from './AuthContext'
+import { useSpotifySDK } from '@/hooks/useSpotifySDK'
 
 interface Track {
   id: string
   name: string
   artistName: string
   albumName: string
-  imageUrl: string
+  imageUrl?: string
   spotifySongId: string
 }
 
+interface CurrentTrack {
+  id: string
+  uri: string
+  name: string
+  artistName: string
+  albumName: string
+  imageUrl: string
+  duration: number
+}
+
 interface PlayerContextType {
-  playlist: string[]
-  currentTrackIndex: number
+  // State
+  isReady: boolean
   isPlaying: boolean
-  currentTrack: CallbackState['track'] | null
+  currentTrack: CurrentTrack | null
   position: number
   duration: number
-  setPlaylist: (uris: string[], startIndex?: number) => void
-  playTrack: (index: number) => void
-  setIsPlaying: (playing: boolean) => void
-  setPlayerState: (state: CallbackState) => void
-  loadPlaylistFromTracks: (tracks: Track[], startIndex?: number) => void
+  volume: number
+
+  // Actions
+  playTracks: (tracks: Track[], startIndex?: number) => void
+  pause: () => void
+  resume: () => void
+  togglePlay: () => void
+  seek: (positionMs: number) => void
+  setVolume: (volume: number) => void
+  previousTrack: () => void
+  nextTrack: () => void
 }
 
 const PlayerContext = createContext<PlayerContextType | null>(null)
 
 export function PlayerProvider({ children }: { children: React.ReactNode }) {
-  const [playlist, setPlaylistState] = useState<string[]>([])
-  const [currentTrackIndex, setCurrentTrackIndex] = useState(0)
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [currentTrack, setCurrentTrack] = useState<CallbackState['track'] | null>(null)
-  const [position, setPosition] = useState(0)
-  const [duration, setDuration] = useState(0)
+  const { accessToken } = useAuth()
+  const [volume, setVolumeState] = React.useState(0.5)
 
-  const setPlaylist = useCallback((uris: string[], startIndex = 0) => {
-    setPlaylistState(uris)
-    setCurrentTrackIndex(startIndex)
-    setIsPlaying(true)
-  }, [])
+  const {
+    isReady,
+    playbackState,
+    play,
+    pause,
+    resume,
+    seek,
+    setVolume: setSDKVolume,
+    previousTrack: sdkPrevious,
+    nextTrack: sdkNext,
+  } = useSpotifySDK(accessToken)
 
-  const playTrack = useCallback((index: number) => {
-    setCurrentTrackIndex(index)
-    setIsPlaying(true)
-  }, [])
+  const currentTrack: CurrentTrack | null = playbackState.track ? {
+    id: playbackState.track.id,
+    uri: playbackState.track.uri,
+    name: playbackState.track.name,
+    artistName: playbackState.track.artists.map(a => a.name).join(', '),
+    albumName: playbackState.track.album.name,
+    imageUrl: playbackState.track.album.images[0]?.url || '',
+    duration: playbackState.track.duration_ms,
+  } : null
 
-  const setPlayerState = useCallback((state: CallbackState) => {
-    setIsPlaying(state.isPlaying)
-    setCurrentTrack(state.track)
-    setPosition(state.progressMs)
-    setDuration(state.durationMs)
-  }, [])
-
-  const loadPlaylistFromTracks = useCallback((tracks: Track[], startIndex = 0) => {
+  const playTracks = useCallback((tracks: Track[], startIndex = 0) => {
     const uris = tracks
       .filter(t => t.spotifySongId)
       .map(t => `spotify:track:${t.spotifySongId}`)
-    setPlaylist(uris, startIndex)
-  }, [setPlaylist])
+
+    if (uris.length > 0) {
+      play(uris, startIndex)
+    }
+  }, [play])
+
+  const togglePlay = useCallback(() => {
+    if (playbackState.paused) {
+      resume()
+    } else {
+      pause()
+    }
+  }, [playbackState.paused, pause, resume])
+
+  const handleSetVolume = useCallback((vol: number) => {
+    setVolumeState(vol)
+    setSDKVolume(vol)
+  }, [setSDKVolume])
 
   return (
     <PlayerContext.Provider
       value={{
-        playlist,
-        currentTrackIndex,
-        isPlaying,
+        isReady,
+        isPlaying: !playbackState.paused,
         currentTrack,
-        position,
-        duration,
-        setPlaylist,
-        playTrack,
-        setIsPlaying,
-        setPlayerState,
-        loadPlaylistFromTracks,
+        position: playbackState.position,
+        duration: playbackState.duration,
+        volume,
+        playTracks,
+        pause,
+        resume,
+        togglePlay,
+        seek,
+        setVolume: handleSetVolume,
+        previousTrack: sdkPrevious,
+        nextTrack: sdkNext,
       }}
     >
       {children}
