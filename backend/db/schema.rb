@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2020_09_14_095658) do
+ActiveRecord::Schema[7.1].define(version: 2026_01_18_000000) do
   create_table "djs", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -26,6 +26,7 @@ ActiveRecord::Schema[7.1].define(version: 2020_09_14_095658) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "slug"
+    t.string "image_url"
     t.index ["dj_id"], name: "index_playlists_on_dj_id"
     t.index ["slug", "created_at"], name: "index_playlists_on_slug_and_created_at"
     t.index ["spinitron_id"], name: "index_playlists_on_spinitron_id"

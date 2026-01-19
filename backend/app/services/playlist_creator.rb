@@ -40,7 +40,9 @@ class PlaylistCreator
     return nil if dj.should_ignore?
 
     url = "https://spinitron.com#{result.url}"
-    songs = PlaylistPageProcessor.new.process(url)
+    processed = PlaylistPageProcessor.new.process(url)
+    songs = processed[:songs]
+    image_url = processed[:image_url]
     return nil if songs.blank?
 
     songs.each { |s| s.dj = dj }
@@ -49,7 +51,8 @@ class PlaylistCreator
       name: result.title,
       dj: dj,
       spinitron_id: result.id,
-      created_at: result.start
+      created_at: result.start,
+      image_url: image_url
     )
     playlist.songs = songs
 

@@ -11,5 +11,6 @@ module Types
     field :dj, Types::DjType, null: true
     field :slug, String, null: false
     field :date, String, null: true
+    field :image_url, String, null: true
   end
 end

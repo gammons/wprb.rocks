@@ -1,11 +1,15 @@
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Info } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import SpotifyLoginButton from '@/components/auth/SpotifyLoginButton'
 import { formatDateISO, getYesterday } from '@/lib/utils'
 import { addDays, parseISO, format } from 'date-fns'
 
-export default function Header() {
+interface HeaderProps {
+  onAboutClick: () => void
+}
+
+export default function Header({ onAboutClick }: HeaderProps) {
   const navigate = useNavigate()
   const { date } = useParams()
 
@@ -61,7 +65,17 @@ export default function Header() {
           </Button>
         </div>
 
-        <SpotifyLoginButton />
+        <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onAboutClick}
+            className="rounded-full"
+          >
+            <Info className="h-5 w-5" />
+          </Button>
+          <SpotifyLoginButton />
+        </div>
       </div>
     </header>
   )

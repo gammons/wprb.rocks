@@ -9,6 +9,7 @@ interface PlaylistHeaderProps {
   date: string
   djName?: string
   trackCount: number
+  imageUrl?: string
   onPlay: () => void
   isPlayable: boolean
 }
@@ -19,6 +20,7 @@ export default function PlaylistHeader({
   date,
   djName,
   trackCount,
+  imageUrl,
   onPlay,
   isPlayable,
 }: PlaylistHeaderProps) {
@@ -26,9 +28,17 @@ export default function PlaylistHeader({
 
   return (
     <div className="flex flex-col md:flex-row gap-6 mb-8">
-      <div className="flex-shrink-0 w-48 h-48 md:w-56 md:h-56 bg-gradient-to-br from-primary/20 to-surface rounded-md flex items-center justify-center shadow-xl mx-auto md:mx-0">
-        <Music className="h-24 w-24 text-primary" />
-      </div>
+      {imageUrl ? (
+        <img
+          src={imageUrl}
+          alt={name}
+          className="flex-shrink-0 w-48 h-48 md:w-56 md:h-56 rounded-md shadow-xl mx-auto md:mx-0 object-cover"
+        />
+      ) : (
+        <div className="flex-shrink-0 w-48 h-48 md:w-56 md:h-56 bg-gradient-to-br from-primary/20 to-surface rounded-md flex items-center justify-center shadow-xl mx-auto md:mx-0">
+          <Music className="h-24 w-24 text-primary" />
+        </div>
+      )}
       <div className="flex flex-col justify-end text-center md:text-left">
         <span className="text-xs uppercase tracking-wider text-text-secondary mb-2">
           Playlist

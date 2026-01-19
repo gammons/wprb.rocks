@@ -8,15 +8,24 @@ interface ShowCardProps {
   date: string
   djName?: string
   timeslot?: string
+  imageUrl?: string
 }
 
-export default function ShowCard({ name, slug, date, djName, timeslot }: ShowCardProps) {
+export default function ShowCard({ name, slug, date, djName, timeslot, imageUrl }: ShowCardProps) {
   return (
     <Link to={`/${date}/show/${slug}`}>
       <Card className="group h-full">
-        <div className="aspect-square bg-gradient-to-br from-surface-hover to-background rounded-md mb-4 flex items-center justify-center">
-          <Music className="h-16 w-16 text-text-muted group-hover:text-primary transition-colors" />
-        </div>
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt={name}
+            className="aspect-square rounded-md mb-4 object-cover w-full"
+          />
+        ) : (
+          <div className="aspect-square bg-gradient-to-br from-surface-hover to-background rounded-md mb-4 flex items-center justify-center">
+            <Music className="h-16 w-16 text-text-muted group-hover:text-primary transition-colors" />
+          </div>
+        )}
         <CardHeader className="p-0">
           <CardTitle className="text-base line-clamp-2">{name}</CardTitle>
           <CardDescription>

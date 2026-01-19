@@ -70,6 +70,7 @@ export default function DayView() {
           slug: string
           date: string
           timeslot?: string
+          imageUrl?: string
           dj?: { name: string }
         }) => (
           <ShowCard
@@ -79,6 +80,7 @@ export default function DayView() {
             date={playlist.date}
             djName={playlist.dj?.name}
             timeslot={playlist.timeslot}
+            imageUrl={playlist.imageUrl}
           />
         ))}
       </div>

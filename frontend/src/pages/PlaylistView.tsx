@@ -111,6 +111,7 @@ export default function PlaylistView() {
         date={playlistData.date}
         djName={playlistData.dj?.name}
         trackCount={tracks.length}
+        imageUrl={playlistData.imageUrl}
         onPlay={handlePlayAll}
         isPlayable={isAuthenticated}
       />
