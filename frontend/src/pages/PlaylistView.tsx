@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useQuery } from '@apollo/client'
 import { GET_PLAYLIST, GET_PLAYLISTS_BY_DATE } from '@/graphql/queries'
@@ -8,11 +9,14 @@ import { Button } from '@/components/ui/button'
 import { ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { usePlayer } from '@/context/PlayerContext'
+import { createSpotifyPlaylist } from '@/lib/spotify'
+import { format, parseISO } from 'date-fns'
 
 export default function PlaylistView() {
   const { date, slug } = useParams()
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, accessToken } = useAuth()
   const { playTracks, currentTrack } = usePlayer()
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
 
   const { loading, error, data } = useQuery(GET_PLAYLIST, {
     variables: { slug, date },
@@ -101,6 +105,38 @@ export default function PlaylistView() {
     playTracks(tracks, index)
   }
 
+  const handleSaveToSpotify = async () => {
+    if (!isAuthenticated || !accessToken) {
+      alert('Please login with Spotify to save playlists!')
+      return
+    }
+
+    setSaveStatus('saving')
+    try {
+      const trackUris = tracks
+        .filter((t: { spotifySongId: string }) => t.spotifySongId)
+        .map((t: { spotifySongId: string }) => `spotify:track:${t.spotifySongId}`)
+
+      const formattedDate = playlistData.createdAt
+        ? format(parseISO(playlistData.createdAt), 'MMM d, yyyy')
+        : playlistData.date
+
+      const { playlistUrl } = await createSpotifyPlaylist(
+        accessToken,
+        `${playlistData.name} - ${formattedDate}`,
+        `From WPRB.rocks - ${playlistData.dj?.name ? `DJ ${playlistData.dj.name}` : 'WPRB Princeton'}`,
+        trackUris
+      )
+
+      setSaveStatus('saved')
+      window.open(playlistUrl, '_blank')
+    } catch (error) {
+      console.error('Failed to save playlist:', error)
+      setSaveStatus('error')
+      setTimeout(() => setSaveStatus('idle'), 3000)
+    }
+  }
+
   // Find prev/next shows for navigation
   const dayPlaylists = dayData?.playlistsByDate || []
   const currentIndex = dayPlaylists.findIndex((p: { slug: string }) => p.slug === slug)
@@ -152,12 +188,15 @@ export default function PlaylistView() {
         name={playlistData.name}
         slug={playlistData.slug}
         date={playlistData.date}
+        createdAt={playlistData.createdAt}
         djName={playlistData.dj?.name}
         trackCount={tracks.length}
         imageUrl={playlistData.imageUrl}
         synopsis={playlistData.synopsis}
         onPlay={handlePlayAll}
+        onSaveToSpotify={handleSaveToSpotify}
         isPlayable={isAuthenticated}
+        saveStatus={saveStatus}
       />
 
       {tracks.length > 0 ? (

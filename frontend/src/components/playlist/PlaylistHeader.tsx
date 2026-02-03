@@ -1,32 +1,40 @@
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { Play, Music } from 'lucide-react'
+import { Play, Music, Plus, Check, Loader2 } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
+import { format, parseISO } from 'date-fns'
 
 interface PlaylistHeaderProps {
   name: string
   slug: string
   date: string
+  createdAt?: string
   djName?: string
   trackCount: number
   imageUrl?: string
   synopsis?: string
   onPlay: () => void
+  onSaveToSpotify?: () => void
   isPlayable: boolean
+  saveStatus?: 'idle' | 'saving' | 'saved' | 'error'
 }
 
 export default function PlaylistHeader({
   name,
   slug,
   date,
+  createdAt,
   djName,
   trackCount,
   imageUrl,
   synopsis,
   onPlay,
+  onSaveToSpotify,
   isPlayable,
+  saveStatus = 'idle',
 }: PlaylistHeaderProps) {
   const displayDate = formatDate(new Date(date + 'T12:00:00'))
+  const airTime = createdAt ? format(parseISO(createdAt), 'h:mm a') : null
 
   return (
     <div className="flex flex-col md:flex-row gap-6 mb-8">
@@ -52,7 +60,7 @@ export default function PlaylistHeader({
           <p className="text-lg text-text-secondary mb-1">with {djName}</p>
         )}
         <p className="text-sm text-text-secondary mb-4">
-          {displayDate} • {trackCount} tracks •{' '}
+          {displayDate}{airTime && ` at ${airTime}`} • {trackCount} tracks •{' '}
           <Link to={`/show/${slug}`} className="text-primary underline hover:text-primary/80">
             See other airdates
           </Link>
@@ -75,7 +83,7 @@ export default function PlaylistHeader({
             })}
           </div>
         )}
-        <div>
+        <div className="flex gap-2">
           <Button
             size="lg"
             onClick={onPlay}
@@ -85,6 +93,20 @@ export default function PlaylistHeader({
             <Play className="h-5 w-5 fill-current" />
             Play
           </Button>
+          {onSaveToSpotify && (
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={onSaveToSpotify}
+              disabled={!isPlayable || trackCount === 0 || saveStatus === 'saving' || saveStatus === 'saved'}
+              className="gap-2"
+            >
+              {saveStatus === 'saving' && <Loader2 className="h-5 w-5 animate-spin" />}
+              {saveStatus === 'saved' && <Check className="h-5 w-5" />}
+              {(saveStatus === 'idle' || saveStatus === 'error') && <Plus className="h-5 w-5" />}
+              {saveStatus === 'saving' ? 'Saving...' : saveStatus === 'saved' ? 'Saved!' : 'Save to Spotify'}
+            </Button>
+          )}
         </div>
       </div>
     </div>

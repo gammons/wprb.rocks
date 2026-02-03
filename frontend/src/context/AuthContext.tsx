@@ -96,6 +96,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       'user-read-private',
       'user-read-playback-state',
       'user-modify-playback-state',
+      'playlist-modify-private',
     ].join(' ')
 
     const redirectUri = `${API_URL}/spotify/authorize`

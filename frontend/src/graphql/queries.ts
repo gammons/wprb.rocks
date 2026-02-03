@@ -7,6 +7,7 @@ export const PLAYLIST_FRAGMENT = gql`
     slug
     date
     timeslot
+    createdAt
     imageUrl
     synopsis
     dj {
