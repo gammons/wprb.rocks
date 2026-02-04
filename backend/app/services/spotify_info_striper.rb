@@ -8,7 +8,9 @@ class SpotifyInfoStriper
   # given an array of song models, populate the spotify info into them.
   def stripe(songs)
     songs.each do |song|
-      spotify_data = @spotify.track_search(song.artist_name, song.name)
+      artist = song.artist_name.to_s[0, 100]
+      track = song.name.to_s[0, 100]
+      spotify_data = @spotify.track_search(artist, track)
 
       sleep 0.2 # be kind to spotify
 
