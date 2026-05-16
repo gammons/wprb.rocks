@@ -71,7 +71,7 @@ spec:
       volumes:
       - name: sqlite-storage
         persistentVolumeClaim:
-          claimName: wprb-rocks-sqlite-pvc
+          claimName: wprb-rocks-sqlite-pvc-nfs
 ---
 apiVersion: v1
 kind: Service
@@ -94,6 +94,10 @@ metadata:
   namespace: wprb-rocks
 spec:
   schedule: "0 * * * *"
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 300
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
   jobTemplate:
     spec:
       template:
@@ -142,4 +146,4 @@ spec:
           volumes:
           - name: sqlite-storage
             persistentVolumeClaim:
-              claimName: wprb-rocks-sqlite-pvc
+              claimName: wprb-rocks-sqlite-pvc-nfs
